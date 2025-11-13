@@ -1,0 +1,13 @@
+package obligatorio_da_310665_336194.sistemaPeajes;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SistemaPeajesApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SistemaPeajesApplication.class, args);
+	}
+
+}
