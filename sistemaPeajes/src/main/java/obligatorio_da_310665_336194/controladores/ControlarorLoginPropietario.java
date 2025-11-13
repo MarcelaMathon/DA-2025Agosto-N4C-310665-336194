@@ -1,0 +1,5 @@
+package obligatorio_da_310665_336194.controladores;
+
+public class ControlarorLoginPropietario extends ControladorLogin {
+
+}

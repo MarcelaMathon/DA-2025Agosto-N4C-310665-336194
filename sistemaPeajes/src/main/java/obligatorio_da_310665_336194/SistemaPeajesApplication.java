@@ -1,4 +1,4 @@
-package obligatorio_da_310665_336194.sistemaPeajes;
+package obligatorio_da_310665_336194;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
