@@ -1,6 +1,6 @@
-package obligatorio_da_310665_336194.dominio;
+package obligatorio_da_310665_336194.dominio.propietario;
 
-public class Penalizado extends EstadoPropietario {
+public class Deshabilitado extends EstadoPropietario {
 
 	public boolean puedeIngresar() {
 		return false;

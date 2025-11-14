@@ -1,8 +1,10 @@
 package obligatorio_da_310665_336194.servicios;
 
 import java.util.ArrayList;
-import obligatorio_da_310665_336194.dominio.Notificacion;
-import obligatorio_da_310665_336194.dominio.Propietario;
+
+import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+
 import java.util.Date;
 import java.util.List;
 

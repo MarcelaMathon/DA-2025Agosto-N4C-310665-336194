@@ -1,8 +1,9 @@
-package obligatorio_da_310665_336194.dominio;
+package obligatorio_da_310665_336194.dominio.notificacion;
 
 import java.util.Date;
 
 import lombok.Getter;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 
 public class Notificacion {
 

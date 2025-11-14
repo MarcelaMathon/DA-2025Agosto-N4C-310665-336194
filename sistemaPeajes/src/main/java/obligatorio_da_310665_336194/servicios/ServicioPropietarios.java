@@ -1,10 +1,12 @@
 package obligatorio_da_310665_336194.servicios;
 
 import java.util.ArrayList;
-import obligatorio_da_310665_336194.dominio.Propietario;
-import obligatorio_da_310665_336194.dominio.EstadosPropietario;
+
+import obligatorio_da_310665_336194.dominio.propietario.EstadoPropietario;
+import obligatorio_da_310665_336194.dominio.propietario.EstadosPropietario;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+
 import java.util.List;
-import obligatorio_da_310665_336194.dominio.EstadoPropietario;
 
 public class ServicioPropietarios {
 

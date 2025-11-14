@@ -1,6 +1,6 @@
-package obligatorio_da_310665_336194.dominio;
+package obligatorio_da_310665_336194.dominio.bonificacion;
 
-public class Trabajador extends TipoBonificacion {
+public class Frecuente extends TipoBonificacion {
 
 	@Override
 	public Double obtenerDescuento(AsignacionDeBonificacion ab) {
@@ -9,7 +9,7 @@ public class Trabajador extends TipoBonificacion {
 
 	@Override
 	public String getTipoBonificacion() {
-		return "Trabajador";
+		return "Frecuente";
 	}
 
 }

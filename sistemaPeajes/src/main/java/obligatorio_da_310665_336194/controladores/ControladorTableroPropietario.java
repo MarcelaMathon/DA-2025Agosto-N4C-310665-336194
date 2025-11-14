@@ -1,13 +1,12 @@
 package obligatorio_da_310665_336194.controladores;
 
-import obligatorio_da_310665_336194.servicios.Fachada;
 import java.util.List;
-
-import obligatorio_da_310665_336194.dominio.AsignacionDeBonificacion;
-import obligatorio_da_310665_336194.dominio.Propietario;
 import obligatorio_da_310665_336194.utils.Respuesta;
-import obligatorio_da_310665_336194.dominio.Transito;
-import obligatorio_da_310665_336194.dominio.Vehiculo;
+import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+import obligatorio_da_310665_336194.dominio.transito.Transito;
+import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
+import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
 public class ControladorTableroPropietario {
 

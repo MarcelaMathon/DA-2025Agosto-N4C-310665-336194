@@ -1,8 +1,10 @@
-package obligatorio_da_310665_336194.dominio;
+package obligatorio_da_310665_336194.dominio.puesto;
 
 import java.util.List;
 
 import lombok.Getter;
+import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
+import obligatorio_da_310665_336194.dominio.transito.Transito;
 
 public class Puesto {
 

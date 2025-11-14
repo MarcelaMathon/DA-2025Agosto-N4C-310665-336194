@@ -2,12 +2,16 @@ package obligatorio_da_310665_336194.servicios;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import obligatorio_da_310665_336194.dominio.AsignacionDeBonificacion;
-import obligatorio_da_310665_336194.dominio.Propietario;
-import obligatorio_da_310665_336194.dominio.Puesto;
-import obligatorio_da_310665_336194.dominio.Tarifa;
-import obligatorio_da_310665_336194.dominio.Transito;
-import obligatorio_da_310665_336194.dominio.Vehiculo;
+
+import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+import obligatorio_da_310665_336194.dominio.puesto.Puesto;
+import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
+import obligatorio_da_310665_336194.dominio.transito.Transito;
+import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
+import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
+import obligatorio_da_310665_336194.servicios.fachada.Fachada;
+
 import java.util.Date;
 import java.util.List;
 
@@ -15,66 +19,48 @@ public class ServicioTransitos {
 
 	private Collection<Transito> transitos = new ArrayList<>();
 
-	public Transito emularTransito(Puesto puesto, String matricula, Date fechaHora) {
+	public Transito emularTransito(Puesto puesto, String matricula, Date fechaHora) throws PeajesExceptions {
 
 		Fachada fachada = Fachada.getInstancia();
 
-		// 1. Obtener vehículo
 		Vehiculo vehiculo = fachada.getVehiculo(matricula);
-		if (vehiculo == null) {
-			return null;
-		}
+		Vehiculo.validarExistencia(vehiculo);
 
-		// 2. Obtener propietario
 		Propietario propietario = fachada.getPropietario(matricula);
-		if (propietario == null) {
-			return null;
-		}
+		propietario.validarPuedeTransitar();
 
-		// 3. Validar que puede transitar
-		if (!fachada.puedeTransitar(propietario)) {
-			return null;
-		}
-
-		// 4. Crear el tránsito
 		Transito transito = new Transito(puesto, vehiculo, fechaHora);
 
-		// 5. Obtener bonificación si aplica
-		AsignacionDeBonificacion bonificacion = fachada.obtenerBonificacion(puesto, propietario);
+		AsignacionDeBonificacion bonificacion = null;
+		if (!propietario.esPenalizado()) {
+			bonificacion = fachada.obtenerBonificacion(puesto, propietario);
+		}
 
-		// 6. Obtener tarifa del puesto según categoría del vehículo
 		List<Tarifa> tarifas = fachada.tarifasDePuesto(puesto);
 
 		Tarifa tarifaAplicable = null;
-
 		for (Tarifa tarifa : tarifas) {
 			if (tarifa.getCategoríaVehiculo().getNombre().equals(vehiculo.getCategoria().getNombre())) {
 				tarifaAplicable = tarifa;
+				break;
 			}
 		}
 
-		// Validar que se encontró la tarifa
-		if (tarifaAplicable == null) {
-			return null;
-		}
-
-		// 7. Calcular costo del tránsito
 		transito.calcularCosto(tarifaAplicable, bonificacion);
 
-		// 8. Descontar del saldo del propietario
+		propietario.validarSaldoSuficiente(transito.getCosto());
 		propietario.descontarSaldo(transito.getCosto());
 
-		// 9. Registrar notificación del tránsito
-		String mensajeTransito = fechaHora + " Pasaste por el puesto " + puesto.getNombre()
-				+ " con el vehículo " + matricula;
-		fachada.enviarNotificacion(propietario, mensajeTransito);
+		if (!propietario.esPenalizado()) {
+			String mensajeTransito = fechaHora + " Pasaste por el puesto " + puesto.getNombre()
+					+ " con el vehículo " + matricula;
+			fachada.enviarNotificacion(propietario, mensajeTransito);
 
-		// 10. Verificar saldo bajo y notificar si corresponde
-		if (propietario.tieneSaldoBajo()) {
-			fachada.enviarSaldoBajo(propietario);
+			if (propietario.tieneSaldoBajo()) {
+				fachada.enviarSaldoBajo(propietario);
+			}
 		}
 
-		// 11. Guardar el tránsito
 		transitos.add(transito);
 
 		return transito;

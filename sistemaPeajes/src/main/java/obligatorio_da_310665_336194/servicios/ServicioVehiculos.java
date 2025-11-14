@@ -1,8 +1,10 @@
 package obligatorio_da_310665_336194.servicios;
 
 import java.util.Collection;
-import obligatorio_da_310665_336194.dominio.Vehiculo;
-import obligatorio_da_310665_336194.dominio.Propietario;
+
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
+
 import java.util.List;
 
 public class ServicioVehiculos {

@@ -1,12 +1,15 @@
 package obligatorio_da_310665_336194.servicios;
 
 import java.util.ArrayList;
-import obligatorio_da_310665_336194.dominio.AsignacionDeBonificacion;
-import obligatorio_da_310665_336194.dominio.Bonificacion;
-import obligatorio_da_310665_336194.dominio.Puesto;
-import obligatorio_da_310665_336194.dominio.Propietario;
+
+import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
+import obligatorio_da_310665_336194.dominio.bonificacion.Bonificacion;
+import obligatorio_da_310665_336194.dominio.bonificacion.TipoBonificacion;
+
 import java.util.List;
-import obligatorio_da_310665_336194.dominio.TipoBonificacion;
+
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+import obligatorio_da_310665_336194.dominio.puesto.Puesto;
 
 public class ServicioBonificaciones {
 

@@ -1,10 +1,10 @@
 package obligatorio_da_310665_336194.servicios;
 
 import java.util.ArrayList;
-import obligatorio_da_310665_336194.dominio.Puesto;
-import obligatorio_da_310665_336194.dominio.Tarifa;
-
 import java.util.List;
+
+import obligatorio_da_310665_336194.dominio.puesto.Puesto;
+import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
 
 public class ServicioPuestos {
 

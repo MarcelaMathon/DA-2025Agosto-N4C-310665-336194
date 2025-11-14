@@ -1,8 +1,10 @@
 package obligatorio_da_310665_336194.controladores;
 
-import obligatorio_da_310665_336194.servicios.Fachada;
+import obligatorio_da_310665_336194.dominio.propietario.EstadoPropietario;
+import obligatorio_da_310665_336194.servicios.fachada.Fachada;
+
 import java.util.List;
-import obligatorio_da_310665_336194.dominio.EstadoPropietario;
+
 import obligatorio_da_310665_336194.utils.Respuesta;
 
 public class ControladorEstadoPropietario {

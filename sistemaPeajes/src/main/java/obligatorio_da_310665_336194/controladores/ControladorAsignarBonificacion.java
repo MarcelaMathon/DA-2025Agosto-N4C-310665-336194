@@ -1,11 +1,12 @@
 package obligatorio_da_310665_336194.controladores;
 
-import obligatorio_da_310665_336194.servicios.Fachada;
 import obligatorio_da_310665_336194.utils.Respuesta;
 import java.util.List;
-import obligatorio_da_310665_336194.dominio.Propietario;
-import obligatorio_da_310665_336194.dominio.Puesto;
-import obligatorio_da_310665_336194.dominio.TipoBonificacion;
+
+import obligatorio_da_310665_336194.dominio.bonificacion.TipoBonificacion;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+import obligatorio_da_310665_336194.dominio.puesto.Puesto;
+import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
 public class ControladorAsignarBonificacion {
 

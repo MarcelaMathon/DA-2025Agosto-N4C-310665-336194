@@ -1,20 +1,27 @@
-package obligatorio_da_310665_336194.servicios;
+package obligatorio_da_310665_336194.servicios.fachada;
 
 import java.util.List;
-import obligatorio_da_310665_336194.dominio.Puesto;
-import obligatorio_da_310665_336194.dominio.Tarifa;
-import obligatorio_da_310665_336194.dominio.Vehiculo;
-import obligatorio_da_310665_336194.dominio.Propietario;
-import obligatorio_da_310665_336194.dominio.AsignacionDeBonificacion;
-import obligatorio_da_310665_336194.dominio.Bonificacion;
-import obligatorio_da_310665_336194.dominio.Transito;
+
+import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
+import obligatorio_da_310665_336194.dominio.bonificacion.Bonificacion;
+import obligatorio_da_310665_336194.dominio.bonificacion.TipoBonificacion;
+import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.propietario.EstadoPropietario;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
+import obligatorio_da_310665_336194.dominio.puesto.Puesto;
+import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
+import obligatorio_da_310665_336194.dominio.transito.Transito;
+import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
+import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
+
 import java.util.Date;
-import obligatorio_da_310665_336194.dominio.TipoBonificacion;
-import obligatorio_da_310665_336194.dominio.EstadoPropietario;
-import obligatorio_da_310665_336194.dominio.Notificacion;
+
 import obligatorio_da_310665_336194.servicios.ServicioBonificaciones;
 import obligatorio_da_310665_336194.servicios.ServicioNotificaciones;
 import obligatorio_da_310665_336194.servicios.ServicioPropietarios;
+import obligatorio_da_310665_336194.servicios.ServicioPuestos;
+import obligatorio_da_310665_336194.servicios.ServicioTransitos;
+import obligatorio_da_310665_336194.servicios.ServicioVehiculos;
 
 public class Fachada {
 
@@ -80,7 +87,7 @@ public class Fachada {
 		return servicioBonificaciones.obtenerBonificacion(puesto, propietario);
 	}
 
-	public Transito emularTransito(Puesto puesto, String matricula, Date fechaHora) {
+	public Transito emularTransito(Puesto puesto, String matricula, Date fechaHora) throws PeajesExceptions {
 		return servicioTransitos.emularTransito(puesto, matricula, fechaHora);
 	}
 
