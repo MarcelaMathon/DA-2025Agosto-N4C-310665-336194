@@ -1,6 +1,6 @@
 package obligatorio_da_310665_336194.servicios;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import obligatorio_da_310665_336194.dominio.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.Bonificacion;
 import obligatorio_da_310665_336194.dominio.Puesto;
@@ -10,9 +10,9 @@ import obligatorio_da_310665_336194.dominio.TipoBonificacion;
 
 public class ServicioBonificaciones {
 
-	private Collection<AsignacionDeBonificacion> asignacionDeBonificacion;
+	private ArrayList<AsignacionDeBonificacion> asignacionDeBonificaciones;
 
-	private Collection<Bonificacion> bonificacion;
+	private ArrayList<Bonificacion> bonificaciones;
 
 	public AsignacionDeBonificacion obtenerBonificacion(Puesto puesto, Propietario propietario) {
 		return null;

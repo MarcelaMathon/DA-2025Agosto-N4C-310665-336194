@@ -4,8 +4,10 @@ import java.util.List;
 
 public class EstadosPropietario {
 
+	private List<EstadoPropietario> estados;
+
 	public List<EstadoPropietario> getEstados() {
-		return null;
+		return estados;
 	}
 
 }

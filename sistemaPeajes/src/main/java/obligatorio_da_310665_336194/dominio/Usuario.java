@@ -1,11 +1,14 @@
 package obligatorio_da_310665_336194.dominio;
 
+import lombok.Getter;
+
 public class Usuario {
 
+	@Getter
 	private String nombre;
-
+	@Getter
 	private String cedula;
-
+	@Getter
 	private String password;
 
 	public boolean validarAcceso(String password) {

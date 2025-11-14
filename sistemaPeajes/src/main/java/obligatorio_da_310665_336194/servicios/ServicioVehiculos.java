@@ -7,12 +7,14 @@ import java.util.List;
 
 public class ServicioVehiculos {
 
-	private Collection<Vehiculo> vehiculo;
+	private Collection<Vehiculo> vehiculos;
 
-	/**
-	 *  
-	 */
 	public Vehiculo getVehiculo(String matricula) {
+		for (Vehiculo v : vehiculos) {
+			if (v.getMatricula().equals(matricula)) {
+				return v;
+			}
+		}
 		return null;
 	}
 

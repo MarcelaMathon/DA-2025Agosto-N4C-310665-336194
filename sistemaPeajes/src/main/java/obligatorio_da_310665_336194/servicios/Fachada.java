@@ -12,8 +12,13 @@ import java.util.Date;
 import obligatorio_da_310665_336194.dominio.TipoBonificacion;
 import obligatorio_da_310665_336194.dominio.EstadoPropietario;
 import obligatorio_da_310665_336194.dominio.Notificacion;
+import obligatorio_da_310665_336194.servicios.ServicioBonificaciones;
+import obligatorio_da_310665_336194.servicios.ServicioNotificaciones;
+import obligatorio_da_310665_336194.servicios.ServicioPropietarios;
 
 public class Fachada {
+
+	private static Fachada instancia;
 
 	private ServicioNotificaciones servicioNotificaciones;
 
@@ -27,106 +32,101 @@ public class Fachada {
 
 	private ServicioTransitos servicioTransitos;
 
-	/**
-	 *  
-	 *  
-	 */
-	private void Fachada() {
-
+	private Fachada() {
+		this.servicioNotificaciones = new ServicioNotificaciones();
+		this.servicioVehiculos = new ServicioVehiculos();
+		this.servicioPropietarios = new ServicioPropietarios();
+		this.servicioPuestos = new ServicioPuestos();
+		this.servicioBonificaciones = new ServicioBonificaciones();
+		this.servicioTransitos = new ServicioTransitos();
 	}
 
 	public static Fachada getInstancia() {
-		return null;
+		if (instancia == null) {
+			instancia = new Fachada();
+		}
+		return instancia;
 	}
 
 	public List<Puesto> listarPuestos() {
-		return null;
+		return servicioPuestos.listarPuestos();
 	}
 
 	public List<Tarifa> tarifasDePuesto(Puesto puesto) {
-		return null;
+		return servicioPuestos.tarifasDePuesto(puesto);
 	}
 
 	public Vehiculo getVehiculo(String matricula) {
-		return null;
+		return servicioVehiculos.getVehiculo(matricula);
 	}
 
 	public Propietario getPropietario(String matricula) {
-		return null;
+		return servicioVehiculos.getPropietario(matricula);
 	}
 
 	public Boolean puedeTransitar(Propietario propietario) {
-		return null;
+		return servicioPropietarios.puedeTransitar(propietario);
 	}
 
-	/**
-	 *  
-	 */
 	public void enviarNotificacion(Propietario propietario, String mensaje) {
-
+		servicioNotificaciones.enviarNotificacion(propietario, mensaje);
 	}
 
-	/**
-	 *  
-	 */
 	public void enviarSaldoBajo(Propietario propietario) {
-
+		servicioNotificaciones.enviarSaldoBajo(propietario);
 	}
 
 	public AsignacionDeBonificacion obtenerBonificacion(Puesto puesto, Propietario propietario) {
-		return null;
+		return servicioBonificaciones.obtenerBonificacion(puesto, propietario);
 	}
 
 	public Transito emularTransito(Puesto puesto, String matricula, Date fechaHora) {
-		return null;
+		return servicioTransitos.emularTransito(puesto, matricula, fechaHora);
 	}
 
 	public List<AsignacionDeBonificacion> obtenerBonificacionesPropietario(Propietario propietario) {
-		return null;
+		return servicioBonificaciones.obtenerBonificacionesPropietario(propietario);
 	}
 
 	public List<Transito> getTransitosPropietario(Propietario propietario) {
-		return null;
+		return servicioTransitos.getTransitosPropietario(propietario);
 	}
 
 	public List<Vehiculo> getVehiculosPropietario(Propietario propietario) {
-		return null;
+		return servicioVehiculos.getVehiculosPropietario(propietario);
 	}
 
 	public Propietario getPropietario() {
-		return null;
+		return servicioPropietarios.getPropietario();
 	}
 
 	public List<Notificacion> getNotificacionesPropietario(Propietario propietario) {
-		return null;
+		return servicioNotificaciones.getNotificacionesPropietario(propietario);
 	}
 
-	/**
-	 *  
-	 */
 	public void borrarNotificaciones(Propietario propietario) {
-
+		servicioNotificaciones.borrarNotificaciones(propietario);
 	}
 
 	public List<Bonificacion> getBonificaciones() {
-		return null;
+		return servicioBonificaciones.getBonificaciones();
 	}
 
 	public Propietario buscarPropietarioPorCedula(String cedula) {
-		return null;
+		return servicioPropietarios.buscarPropietarioPorCedula(cedula);
 	}
 
 	public AsignacionDeBonificacion asignarBonificacion(Propietario propietario, Puesto puesto,
 			TipoBonificacion tipoBonificacion) {
-		return null;
+		return servicioBonificaciones.asignarBonificacion(propietario, puesto, tipoBonificacion);
 	}
 
 	public List<EstadoPropietario> getEstados() {
-		return null;
+		return servicioPropietarios.getEstados();
 	}
 
 	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) {
-		return null;
+		return servicioPropietarios.cambiarEstado(cedula, nuevoEstado);
 	}
 
 }
