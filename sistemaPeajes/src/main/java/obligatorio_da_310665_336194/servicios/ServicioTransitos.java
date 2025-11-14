@@ -67,7 +67,13 @@ public class ServicioTransitos {
 	}
 
 	public List<Transito> getTransitosPropietario(Propietario propietario) {
-		return null;
+		List<Transito> transitosPropietario = new ArrayList<>();
+		for (Transito transito : transitos) {
+			if (transito.getPropietario().equals(propietario)) {
+				transitosPropietario.add(transito);
+			}
+		}
+		return transitosPropietario;
 	}
 
 }

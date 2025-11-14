@@ -24,7 +24,13 @@ public class ServicioNotificaciones {
 	}
 
 	public List<Notificacion> getNotificacionesPropietario(Propietario propietario) {
-		return null;
+		List<Notificacion> notificacionesPropietario = new ArrayList<>();
+		for (Notificacion notificacion : notificaciones) {
+			if (notificacion.getPropietario().equals(propietario)) {
+				notificacionesPropietario.add(notificacion);
+			}
+		}
+		return notificacionesPropietario;
 	}
 
 	public void borrarNotificaciones(Propietario propietario) {

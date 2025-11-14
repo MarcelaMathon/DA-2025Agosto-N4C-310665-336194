@@ -18,9 +18,6 @@ public class ServicioPropietarios {
 		return false;
 	}
 
-	/**
-	 *  
-	 */
 	public Propietario getPropietario() {
 		return null;
 	}

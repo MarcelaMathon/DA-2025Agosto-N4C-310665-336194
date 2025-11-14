@@ -15,6 +15,11 @@ public class ServicioPuestos {
 	}
 
 	public List<Tarifa> tarifasDePuesto(Puesto puesto) {
+		for (Puesto p : puestos) {
+			if (p.equals(puesto)) {
+				return p.getTarifas();
+			}
+		}
 		return null;
 	}
 

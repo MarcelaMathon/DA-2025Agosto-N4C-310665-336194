@@ -3,6 +3,7 @@ package obligatorio_da_310665_336194.dominio.transito;
 import java.util.Date;
 
 import lombok.Getter;
+import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
 import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
@@ -21,6 +22,8 @@ public class Transito {
     private AsignacionDeBonificacion bonificacionAplicada;
     @Getter
     private Double costo;
+    @Getter
+    private Propietario propietario;
 
     public Transito(Puesto puesto, Vehiculo vehiculo, Date fechaHora) {
         this.puesto = puesto;
