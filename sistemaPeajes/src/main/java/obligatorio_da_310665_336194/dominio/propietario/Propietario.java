@@ -46,11 +46,11 @@ public class Propietario extends Usuario {
 	}
 
 	public Boolean puedeIngresar() {
-		return null;
+		return this.estadoActual.puedeIngresar();
 	}
 
 	public boolean puedeTransitar() {
-		return false;
+		return this.estadoActual.puedeTransitar();
 	}
 
 	/**
@@ -61,15 +61,15 @@ public class Propietario extends Usuario {
 	}
 
 	public Boolean recibeNotificaciones() {
-		return null;
+		return this.estadoActual.recibeNotificaciones();
 	}
 
 	public Boolean aplicaBonificaciones() {
-		return null;
+		return this.estadoActual.aplicaBonificaciones();
 	}
 
 	public EstadoPropietario cambiarEstado(EstadoPropietario nuevoEstado) {
-		return null;
+		return this.estadoActual = nuevoEstado;
 	}
 
 	public void descontarSaldo(Double monto) {

@@ -28,7 +28,11 @@ public class Puesto {
 	}
 
 	public List<Tarifa> tarifasDePuesto(Puesto puesto) {
-		return null;
+		return this.tarifas;
+	}
+
+	public void agregarTarifa(Tarifa tarifa) {
+		this.tarifas.add(tarifa);
 	}
 
 }

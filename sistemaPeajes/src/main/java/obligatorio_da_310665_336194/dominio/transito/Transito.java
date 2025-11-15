@@ -31,14 +31,15 @@ public class Transito {
         this.fechaHora = fechaHora;
     }
 
-    public Double calcularCosto(Tarifa tarifa, AsignacionDeBonificacion bonificacion) {
+    public Double calcularCosto(Tarifa tarifa, AsignacionDeBonificacion asignacionBonificacion) {
         this.tarifaAplicada = tarifa;
-        this.bonificacionAplicada = bonificacion;
+        this.bonificacionAplicada = asignacionBonificacion;
         Double montoBase = tarifa.getMonto();
 
-        if (bonificacion != null) {
-            Double descuento = bonificacion.obtenerDescuento(this.vehiculo, this.fechaHora);
+        if (asignacionBonificacion != null) {
+            Double descuento = asignacionBonificacion.obtenerDescuento(this.vehiculo, this.fechaHora);
             this.costo = montoBase * (1 - descuento);
+            asignacionBonificacion.agregarTransito(this);
         } else {
             this.costo = montoBase;
         }

@@ -3,31 +3,65 @@ package obligatorio_da_310665_336194.controladores;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
 import obligatorio_da_310665_336194.dominio.transito.Transito;
+import obligatorio_da_310665_336194.dtos.PuestoDTO;
+import obligatorio_da_310665_336194.dtos.TarifaDTO;
 import obligatorio_da_310665_336194.dtos.TransitoDTO;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import obligatorio_da_310665_336194.utils.Respuesta;
 
 import java.util.Date;
 
+@RestController
+@RequestMapping("/emularTransito")
+@Scope("session")
 public class ControladorEmularTransito {
 
 	Fachada fachada = Fachada.getInstancia();
+	private List<Puesto> puestos;
+
+	@PostMapping("/vistaConectada")
+	public List<Respuesta> inicializarVista() {
+		return listarPuestos();
+	}
 
 	public List<Respuesta> listarPuestos() {
-		return Respuesta.lista(new Respuesta("puestos", fachada.listarPuestos()));
+		puestos = new ArrayList<>(fachada.listarPuestos());
+		List<PuestoDTO> puestosDTO = puestos.stream()
+				.map(PuestoDTO::new)
+				.collect(Collectors.toList());
+		return Respuesta.lista(new Respuesta("puestos", puestosDTO));
 	}
 
-	public List<Respuesta> tarifasDePuesto(Puesto puesto) {
-		return Respuesta.lista(new Respuesta("tarifas", fachada.tarifasDePuesto(puesto)));
+	@GetMapping("/tarifasDePuesto")
+	public List<Respuesta> tarifasDePuesto(@RequestParam int posPuesto) {
+		Puesto puesto = puestos.get(posPuesto);
+		List<TarifaDTO> tarifasDTO = fachada.tarifasDePuesto(puesto)
+				.stream()
+				.map(TarifaDTO::new)
+				.collect(Collectors.toList());
+		return Respuesta.lista(new Respuesta("tarifas", tarifasDTO));
 	}
 
-	public List<Respuesta> emularTransito(Puesto puesto, String matricula, Date fechaHora) {
+	@PostMapping("/emularTransito")
+	public List<Respuesta> emularTransito(@RequestParam int posPuesto, @RequestParam String matricula,
+			@RequestParam Long fechaHora) {
 		try {
-			Transito transito = fachada.emularTransito(puesto, matricula, fechaHora);
+			Puesto puesto = puestos.get(posPuesto);
+			Date fecha = new Date(fechaHora);
+			Transito transito = fachada.emularTransito(puesto, matricula, fecha);
 			Propietario propietario = fachada.getPropietario(matricula);
 			return Respuesta.lista(transitoDto(transito, propietario));
 		} catch (PeajesExceptions e) {

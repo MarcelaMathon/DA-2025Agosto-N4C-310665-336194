@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emular tránsito</title>
+    <script src="vistaWeb.js"></script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .icon {
+        width: 40px;
+        height: 40px;
+        background: #1e3a8a;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #1e3a8a;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 30px;
+        margin-left: 52px;
+      }
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+      .column {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+      }
+      select,
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #374151;
+        background: white;
+        box-sizing: border-box;
+      }
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: #1e3a8a;
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+      }
+      input::placeholder {
+        color: #9ca3af;
+      }
+      .tarifas-container {
+        margin-top: 20px;
+      }
+      .tarifas-title {
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .tarifas-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .tarifas-table th {
+        background: #f9fafb;
+        padding: 10px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+        color: #6b7280;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .tarifas-table td {
+        padding: 10px;
+        font-size: 14px;
+        color: #374151;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .tarifas-table tr:last-child td {
+        border-bottom: none;
+      }
+      .tarifas-info {
+        text-align: center;
+        color: #9ca3af;
+        font-size: 13px;
+        margin-top: 8px;
+      }
+      button {
+        background: #1e3a8a;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        width: 100%;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background: #1e40af;
+      }
+      button:active {
+        transform: scale(0.98);
+      }
+      .resultado {
+        display: none;
+        margin-top: 30px;
+        padding: 20px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+      }
+      .resultado.show {
+        display: block;
+      }
+      .resultado-title {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 15px;
+        font-size: 15px;
+      }
+      .resultado-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 14px;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .resultado-item:last-child {
+        border-bottom: none;
+      }
+      .resultado-label {
+        font-weight: 500;
+        color: #6b7280;
+      }
+      .resultado-value {
+        font-weight: 600;
+        color: #1e3a8a;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #9ca3af;
+        font-size: 12px;
+      }
+      .error-message {
+        background: #fee;
+        border: 1px solid #fcc;
+        color: #c00;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="icon">🚗</div>
+      <h1>Emular tránsito</h1>
+    </div>
+    <p class="subtitle">
+      Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule
+      un tránsito.
+    </p>
+
+    <div class="container">
+      <form id="formEmularTransito">
+        <div class="layout">
+          <!-- Columna izquierda -->
+          <div class="column">
+            <div class="form-group">
+              <label for="puesto">Puesto</label>
+              <select id="puesto" name="posPuesto" required>
+                <option value="">Seleccione un puesto</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="matricula">Matrícula</label>
+              <input
+                type="text"
+                id="matricula"
+                name="matricula"
+                placeholder="Ej: ABC1234"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="fechaHora">Fecha y hora del tránsito</label>
+              <input
+                type="datetime-local"
+                id="fechaHora"
+                name="fechaHora"
+                required
+              />
+            </div>
+
+            <button type="submit">Emular tránsito</button>
+            <div id="errorMessage"></div>
+          </div>
+
+          <!-- Columna derecha -->
+          <div class="column">
+            <div class="tarifas-container">
+              <div class="tarifas-title">Tarifas del puesto</div>
+              <table class="tarifas-table" id="tablaTarifas">
+                <thead>
+                  <tr>
+                    <th>Categoría</th>
+                    <th>Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="2" style="text-align: center; color: #9ca3af">
+                      Seleccione un puesto
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="tarifas-info">
+                Se muestran categoría y monto actuales del puesto seleccionado.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resultado -->
+        <div class="resultado" id="resultado">
+          <div class="resultado-title">Resultado</div>
+          <div class="resultado-item">
+            <span class="resultado-label">Propietario:</span>
+            <span class="resultado-value" id="resPropietario">-</span>
+          </div>
+          <div class="resultado-item">
+            <span class="resultado-label">Categoría:</span>
+            <span class="resultado-value" id="resCategoria">-</span>
+          </div>
+          <div class="resultado-item">
+            <span class="resultado-label">Bonificación:</span>
+            <span class="resultado-value" id="resBonificacion">-</span>
+          </div>
+          <div class="resultado-item">
+            <span class="resultado-label">Costo del tránsito:</span>
+            <span class="resultado-value" id="resCosto">-</span>
+          </div>
+          <div class="resultado-item">
+            <span class="resultado-label">Saldo luego del tránsito:</span>
+            <span class="resultado-value" id="resSaldo">-</span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="footer">© 2025 – Emular tránsitos</div>
+
+    <script src="utilesVista.js"></script>
+    <script>
+      // Configurar inicialización de vista
+      urlIniciarVista = "/emularTransito/vistaConectada";
+      parametrosInicioVista = "";
+
+      // Variables globales
+      let posPuestoSeleccionado = -1;
+
+      // Funciones para procesar respuestas del servidor
+      function mostrar_puestos(data) {
+        const select = document.getElementById("puesto");
+        select.innerHTML = '<option value="">Seleccione un puesto</option>';
+
+        data.forEach((puesto, index) => {
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = puesto.nombre;
+          select.appendChild(option);
+        });
+      }
+
+      function mostrar_tarifas(data) {
+        const tbody = document.querySelector("#tablaTarifas tbody");
+        tbody.innerHTML = "";
+
+        if (!data || data.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="2" style="text-align:center;color:#9ca3af">No hay tarifas disponibles</td></tr>';
+          return;
+        }
+
+        data.forEach((tarifa) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            "<td>" +
+            tarifa.categoriaVehiculo +
+            "</td><td>$ " +
+            tarifa.monto.toFixed(2) +
+            "</td>";
+          tbody.appendChild(tr);
+        });
+      }
+
+      function mostrar_transito(data) {
+        document.getElementById("resPropietario").textContent =
+          data.nombrePropietario + " (" + data.estadoPropietario + ")";
+        document.getElementById("resCategoria").textContent =
+          data.categoriaVehiculo;
+        document.getElementById("resBonificacion").textContent =
+          data.nombreBonificacion || "Sin bonificación";
+        document.getElementById("resCosto").textContent =
+          "$ " + data.costoTransito.toFixed(2);
+        document.getElementById("resSaldo").textContent =
+          "$ " + data.saldoFinal.toFixed(2);
+
+        document.getElementById("resultado").classList.add("show");
+        document.getElementById("errorMessage").innerHTML = "";
+      }
+
+      function mostrar_error(mensaje) {
+        document.getElementById("errorMessage").innerHTML =
+          '<div class="error-message">' + mensaje + "</div>";
+        document.getElementById("resultado").classList.remove("show");
+      }
+
+      function excepcionDeAplicacion(mensaje) {
+        mostrar_error(mensaje);
+      }
+
+      // Event listener para selección de puesto
+      document
+        .getElementById("puesto")
+        .addEventListener("change", function (e) {
+          posPuestoSeleccionado = parseInt(e.target.value);
+
+          if (posPuestoSeleccionado >= 0) {
+            // Solicitar tarifas del puesto seleccionado
+            fetch(
+              "/emularTransito/tarifasDePuesto?posPuesto=" +
+                posPuestoSeleccionado
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                if (Array.isArray(data)) {
+                  data.forEach((respuesta) => {
+                    if (respuesta.id === "tarifas") {
+                      mostrar_tarifas(respuesta.parametro);
+                    }
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error al obtener tarifas:", error);
+              });
+          } else {
+            // Limpiar tabla si no hay puesto seleccionado
+            const tbody = document.querySelector("#tablaTarifas tbody");
+            tbody.innerHTML =
+              '<tr><td colspan="2" style="text-align:center;color:#9ca3af">Seleccione un puesto</td></tr>';
+          }
+        });
+
+      // Event listener para el formulario
+      document
+        .getElementById("formEmularTransito")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          if (posPuestoSeleccionado < 0) {
+            alert("Debe seleccionar un puesto");
+            return;
+          }
+
+          const matricula = document.getElementById("matricula").value;
+          const fechaHoraInput = document.getElementById("fechaHora").value;
+
+          if (!matricula || !fechaHoraInput) {
+            alert("Debe completar todos los campos");
+            return;
+          }
+
+          // Convertir fecha local a timestamp
+          const fechaHora = new Date(fechaHoraInput).getTime();
+
+          const params =
+            "posPuesto=" +
+            posPuestoSeleccionado +
+            "&matricula=" +
+            encodeURIComponent(matricula) +
+            "&fechaHora=" +
+            fechaHora;
+
+          submit("/emularTransito/emularTransito", params);
+        });
+
+      // Establecer fecha y hora actual por defecto
+      window.addEventListener("DOMContentLoaded", function () {
+        const ahora = new Date();
+        ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
+        document.getElementById("fechaHora").value = ahora
+          .toISOString()
+          .slice(0, 16);
+      });
+    </script>
+  </body>
+</html>

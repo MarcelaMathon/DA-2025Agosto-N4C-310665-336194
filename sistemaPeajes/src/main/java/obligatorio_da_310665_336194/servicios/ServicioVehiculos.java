@@ -32,7 +32,7 @@ public class ServicioVehiculos {
 	}
 
 	public Propietario getPropietario(String matricula) {
-		return null;
+		return getVehiculo(matricula).getPropietario();
 	}
 
 	public List<Vehiculo> getVehiculosPropietario(Propietario propietario) {

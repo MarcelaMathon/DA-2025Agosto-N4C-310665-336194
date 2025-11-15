@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import obligatorio_da_310665_336194.dominio.bonificacion.Bonificacion;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
+import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
 import obligatorio_da_310665_336194.dominio.vehiculo.CategoríaVehiculo;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.servicios.fachada.Fachada;
@@ -19,6 +20,7 @@ public class SistemaPeajesApplication {
 		System.out.println("\n=======================================================");
 		System.out.println("   Aplicación iniciada correctamente");
 		System.out.println("   Accede a: http://localhost:8080/asignarBonificacion.html");
+		System.out.println("   Accede a: http://localhost:8080/emularTransito.html");
 		System.out.println("=======================================================\n");
 	}
 
@@ -40,6 +42,21 @@ public class SistemaPeajesApplication {
 		Fachada.getInstancia().agregar(puesto1);
 		Fachada.getInstancia().agregar(puesto2);
 		Fachada.getInstancia().agregar(puesto3);
+
+		Tarifa tarifa1 = new Tarifa(puesto1, new CategoríaVehiculo("Auto"), 50.0);
+		Tarifa tarifa2 = new Tarifa(puesto1, new CategoríaVehiculo("Camioneta"), 80.0);
+		Tarifa tarifa3 = new Tarifa(puesto1, new CategoríaVehiculo("Moto"), 30.0);
+		Tarifa tarifa4 = new Tarifa(puesto2, new CategoríaVehiculo("Auto"), 40.0);
+		Tarifa tarifa5 = new Tarifa(puesto2, new CategoríaVehiculo("Camioneta"), 20.0);
+		Tarifa tarifa6 = new Tarifa(puesto2, new CategoríaVehiculo("Moto"), 20.0);
+
+		puesto1.agregarTarifa(tarifa1);
+		puesto1.agregarTarifa(tarifa2);
+		puesto1.agregarTarifa(tarifa3);
+
+		puesto2.agregarTarifa(tarifa4);
+		puesto2.agregarTarifa(tarifa5);
+		puesto2.agregarTarifa(tarifa6);
 
 		// Crear propietarios con diferentes estados
 		Propietario prop1 = new Propietario("12345678", "Juan Pérez");
