@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
-import obligatorio_da_310665_336194.dominio.bonificacion.Exonerado;
-import obligatorio_da_310665_336194.dominio.bonificacion.Frecuente;
 import obligatorio_da_310665_336194.dominio.bonificacion.TipoBonificacion;
-import obligatorio_da_310665_336194.dominio.bonificacion.Trabajador;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
@@ -44,7 +40,7 @@ public class ControladorAsignarBonificacion {
 		if (cedula.isBlank())
 			throw new PeajesExceptions("Debe ingresar una cédula");
 
-		Propietario propietario = fachada.buscarPropietarioPorCedulaConValidacion(cedula);
+		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
 		PropietarioDTO dto = new PropietarioDTO(propietario);
 
 		// Obtener bonificaciones asignadas
@@ -69,20 +65,13 @@ public class ControladorAsignarBonificacion {
 		if (nombreBonificacion.isBlank())
 			throw new PeajesExceptions("Debe especificar una bonificación");
 
-		// Buscar propietario
-		Propietario propietario = fachada.buscarPropietarioPorCedulaConValidacion(cedula);
-
-		// Obtener puesto por posición
+		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
 		Puesto puesto = puestos.get(posPuesto);
 
-		// Crear tipo de bonificación
-		TipoBonificacion tipoBonificacion = crearTipoBonificacion(nombreBonificacion);
+		TipoBonificacion tipoBonificacion = fachada.crearTipoBonificacion(nombreBonificacion);
 
-		// Asignar bonificación
-		AsignacionDeBonificacion asignacion = fachada.asignarBonificacion(propietario, puesto, tipoBonificacion);
-		BonificacionAsignadaDTO dto = new BonificacionAsignadaDTO(asignacion);
+		fachada.asignarBonificacion(propietario, puesto, tipoBonificacion);
 
-		// Obtener bonificaciones actualizadas
 		List<BonificacionAsignadaDTO> bonificacionesDTO = fachada.obtenerBonificacionesPropietario(propietario)
 				.stream()
 				.map(BonificacionAsignadaDTO::new)
@@ -94,7 +83,7 @@ public class ControladorAsignarBonificacion {
 	}
 
 	private Respuesta bonificaciones() {
-		List<String> nombresBonificaciones = List.of("Exonerado", "Frecuente", "Trabajador");
+		List<String> nombresBonificaciones = fachada.obtenerNombresTiposBonificacion();
 		return new Respuesta("bonificaciones", nombresBonificaciones);
 	}
 
@@ -104,19 +93,6 @@ public class ControladorAsignarBonificacion {
 				.map(PuestoDTO::new)
 				.collect(Collectors.toList());
 		return new Respuesta("puestos", puestosDTO);
-	}
-
-	private TipoBonificacion crearTipoBonificacion(String nombre) {
-		switch (nombre) {
-			case "Exonerado":
-				return new Exonerado();
-			case "Frecuente":
-				return new Frecuente();
-			case "Trabajador":
-				return new Trabajador();
-			default:
-				return null;
-		}
 	}
 
 }

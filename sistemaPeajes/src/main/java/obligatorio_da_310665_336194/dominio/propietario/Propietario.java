@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.Setter;
 import obligatorio_da_310665_336194.dominio.Usuario;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
@@ -56,7 +57,7 @@ public class Propietario extends Usuario {
 	 *  
 	 */
 	public String getNombreEstado() {
-		return null;
+		return this.estadoActual.getNombreEstado();
 	}
 
 	public Boolean recibeNotificaciones() {

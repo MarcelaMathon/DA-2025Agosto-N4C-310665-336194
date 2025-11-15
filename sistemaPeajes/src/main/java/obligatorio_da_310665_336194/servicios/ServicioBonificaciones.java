@@ -69,4 +69,24 @@ public class ServicioBonificaciones {
 		return nuevaAsignacion;
 	}
 
+	/**
+	 * Obtiene los nombres de los tipos de bonificación disponibles.
+	 * Aplica Experto: delega a TipoBonificacion que conoce sus tipos.
+	 */
+	public List<String> obtenerNombresTiposBonificacion() {
+		return TipoBonificacion.obtenerNombresDisponibles();
+	}
+
+	/**
+	 * Crea un tipo de bonificación a partir de su nombre.
+	 * Aplica Experto: delega a TipoBonificacion la creación.
+	 */
+	public TipoBonificacion crearTipoBonificacion(String nombre) throws PeajesExceptions {
+		TipoBonificacion tipo = TipoBonificacion.crearPorNombre(nombre);
+		if (tipo == null) {
+			throw new PeajesExceptions("Tipo de bonificación no válido: " + nombre);
+		}
+		return tipo;
+	}
+
 }

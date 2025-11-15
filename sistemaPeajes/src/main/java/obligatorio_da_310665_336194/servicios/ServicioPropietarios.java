@@ -29,29 +29,20 @@ public class ServicioPropietarios {
 		return propietario.puedeTransitar();
 	}
 
-	public Propietario buscarPropietarioPorCedula(String cedula) {
+	public Propietario buscarPropietarioPorCedula(String cedula) throws PeajesExceptions {
 		for (Propietario p : propietarios) {
 			if (p.getCedula().equals(cedula)) {
 				return p;
 			}
 		}
-		return null;
-	}
-
-	public Propietario buscarPropietarioPorCedulaConValidacion(String cedula)
-			throws PeajesExceptions {
-		Propietario propietario = buscarPropietarioPorCedula(cedula);
-		if (propietario == null) {
-			throw new PeajesExceptions("No existe el propietario");
-		}
-		return propietario;
+		throw new PeajesExceptions("No existe el propietario");
 	}
 
 	public List<EstadoPropietario> getEstados() {
 		return estadosPropietario.getEstados();
 	}
 
-	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) {
+	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) throws PeajesExceptions {
 		Propietario propietario = buscarPropietarioPorCedula(cedula);
 		if (propietario != null) {
 			propietario.cambiarEstado(nuevoEstado);

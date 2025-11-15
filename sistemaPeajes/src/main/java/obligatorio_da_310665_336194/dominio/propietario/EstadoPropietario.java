@@ -5,7 +5,7 @@ import lombok.Getter;
 public abstract class EstadoPropietario {
 
 	@Getter
-	private String nombre;
+	protected String nombre;
 	@Getter
 	private boolean puedeIngresar;
 
@@ -14,7 +14,7 @@ public abstract class EstadoPropietario {
 	public abstract boolean puedeTransitar();
 
 	public String getNombreEstado() {
-		return null;
+		return this.nombre;
 	}
 
 	public abstract Boolean recibeNotificaciones();

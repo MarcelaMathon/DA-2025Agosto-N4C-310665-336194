@@ -11,7 +11,7 @@ public class ControladorEstadoPropietario {
 
 	Fachada fachada = Fachada.getInstancia();
 
-	public List<Respuesta> buscarPropietarioPorCedula(String cedula) {
+	public List<Respuesta> buscarPropietarioPorCedula(String cedula) throws Exception {
 		return Respuesta.lista(new Respuesta("buscarPropietarioPorCedula",
 				fachada.buscarPropietarioPorCedula(cedula)));
 	}
@@ -20,7 +20,7 @@ public class ControladorEstadoPropietario {
 		return Respuesta.lista(new Respuesta("getEstados", fachada.getEstados()));
 	}
 
-	public List<Respuesta> cambiarEstado(String cedula, EstadoPropietario nuevoEstado) {
+	public List<Respuesta> cambiarEstado(String cedula, EstadoPropietario nuevoEstado) throws Exception {
 		return Respuesta.lista(new Respuesta("cambiarEstado", fachada.cambiarEstado(cedula, nuevoEstado)));
 	}
 

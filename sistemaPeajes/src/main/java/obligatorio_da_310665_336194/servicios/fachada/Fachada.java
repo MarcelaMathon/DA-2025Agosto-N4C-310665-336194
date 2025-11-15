@@ -115,12 +115,8 @@ public class Fachada {
 		return servicioBonificaciones.getBonificaciones();
 	}
 
-	public Propietario buscarPropietarioPorCedula(String cedula) {
+	public Propietario buscarPropietarioPorCedula(String cedula) throws PeajesExceptions {
 		return servicioPropietarios.buscarPropietarioPorCedula(cedula);
-	}
-
-	public Propietario buscarPropietarioPorCedulaConValidacion(String cedula) throws PeajesExceptions {
-		return servicioPropietarios.buscarPropietarioPorCedulaConValidacion(cedula);
 	}
 
 	public AsignacionDeBonificacion asignarBonificacion(Propietario propietario, Puesto puesto,
@@ -132,7 +128,7 @@ public class Fachada {
 		return servicioPropietarios.getEstados();
 	}
 
-	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) {
+	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) throws PeajesExceptions {
 		return servicioPropietarios.cambiarEstado(cedula, nuevoEstado);
 	}
 
@@ -150,6 +146,14 @@ public class Fachada {
 
 	public void agregar(Bonificacion bonificacion) {
 		servicioBonificaciones.agregar(bonificacion);
+	}
+
+	public List<String> obtenerNombresTiposBonificacion() {
+		return servicioBonificaciones.obtenerNombresTiposBonificacion();
+	}
+
+	public TipoBonificacion crearTipoBonificacion(String nombre) throws PeajesExceptions {
+		return servicioBonificaciones.crearTipoBonificacion(nombre);
 	}
 
 }
