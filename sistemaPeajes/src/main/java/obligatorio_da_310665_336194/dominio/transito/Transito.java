@@ -35,12 +35,14 @@ public class Transito {
         this.tarifaAplicada = tarifa;
         this.bonificacionAplicada = bonificacion;
         Double montoBase = tarifa.getMonto();
+
         if (bonificacion != null) {
-            Double descuento = bonificacion.obtenerDescuento(bonificacion);
-            this.costo = montoBase - (montoBase * descuento / 100);
+            Double descuento = bonificacion.obtenerDescuento(this.vehiculo, this.fechaHora);
+            this.costo = montoBase * (1 - descuento);
         } else {
             this.costo = montoBase;
         }
+
         return this.costo;
     }
 

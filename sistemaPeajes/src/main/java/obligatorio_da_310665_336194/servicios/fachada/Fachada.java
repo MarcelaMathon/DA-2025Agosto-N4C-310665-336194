@@ -103,10 +103,6 @@ public class Fachada {
 		return servicioVehiculos.getVehiculosPropietario(propietario);
 	}
 
-	public Propietario getPropietario() {
-		return servicioPropietarios.getPropietario();
-	}
-
 	public List<Notificacion> getNotificacionesPropietario(Propietario propietario) {
 		return servicioNotificaciones.getNotificacionesPropietario(propietario);
 	}
@@ -123,8 +119,12 @@ public class Fachada {
 		return servicioPropietarios.buscarPropietarioPorCedula(cedula);
 	}
 
+	public Propietario buscarPropietarioPorCedulaConValidacion(String cedula) throws PeajesExceptions {
+		return servicioPropietarios.buscarPropietarioPorCedulaConValidacion(cedula);
+	}
+
 	public AsignacionDeBonificacion asignarBonificacion(Propietario propietario, Puesto puesto,
-			TipoBonificacion tipoBonificacion) {
+			TipoBonificacion tipoBonificacion) throws PeajesExceptions {
 		return servicioBonificaciones.asignarBonificacion(propietario, puesto, tipoBonificacion);
 	}
 

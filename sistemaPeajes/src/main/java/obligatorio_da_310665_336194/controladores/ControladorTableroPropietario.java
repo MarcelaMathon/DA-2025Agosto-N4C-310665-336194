@@ -13,8 +13,7 @@ public class ControladorTableroPropietario {
 	// TODO: hacer DTOS y ver como devolver la información en inicializar tablero
 	Fachada fachada = Fachada.getInstancia();
 
-	public List<Respuesta> inicializarTablero() {
-		Propietario propietario = getPropietario();
+	public List<Respuesta> inicializarTablero(Propietario propietario) {
 		List<AsignacionDeBonificacion> bonificaciones = obtenerBonificacionesPropietario(propietario);
 		List<Transito> transitos = getTransitosPropietario(propietario);
 		List<Vehiculo> vehiculos = getVehiculosPropietario(propietario);
@@ -34,10 +33,6 @@ public class ControladorTableroPropietario {
 
 	private List<Vehiculo> getVehiculosPropietario(Propietario propietario) {
 		return fachada.getVehiculosPropietario(propietario);
-	}
-
-	private Propietario getPropietario() {
-		return fachada.getPropietario();
 	}
 
 	public List<Respuesta> getNotificacionesPropietario(Propietario propietario) {

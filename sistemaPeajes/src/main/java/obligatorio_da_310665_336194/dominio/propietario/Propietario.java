@@ -87,4 +87,14 @@ public class Propietario extends Usuario {
 		return "Penalizado".equals(this.getNombreEstado());
 	}
 
+	public void validarPuedeRecibirBonificacion() throws PeajesExceptions {
+		if ("Deshabilitado".equals(this.getNombreEstado())) {
+			throw new PeajesExceptions("El propietario esta deshabilitado. No se pueden asignar bonificaciones");
+		}
+	}
+
+	public boolean estaDeshabilitado() {
+		return "Deshabilitado".equals(this.getNombreEstado());
+	}
+
 }

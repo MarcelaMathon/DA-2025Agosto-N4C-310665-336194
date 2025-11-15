@@ -35,7 +35,6 @@ public class Vehiculo {
 		return null;
 	}
 
-	// Validación aplicando Principio de Experto
 	public static void validarExistencia(Vehiculo vehiculo) throws PeajesExceptions {
 		if (vehiculo == null) {
 			throw new PeajesExceptions("No existe el vehículo");
