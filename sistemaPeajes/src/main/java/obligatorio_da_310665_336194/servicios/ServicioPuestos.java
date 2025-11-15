@@ -10,6 +10,16 @@ public class ServicioPuestos {
 
 	private ArrayList<Puesto> puestos;
 
+	public ServicioPuestos() {
+		this.puestos = new ArrayList<>();
+	}
+
+	public void agregar(Puesto puesto) {
+		if (puesto != null) {
+			this.puestos.add(puesto);
+		}
+	}
+
 	public List<Puesto> listarPuestos() {
 		return puestos;
 	}

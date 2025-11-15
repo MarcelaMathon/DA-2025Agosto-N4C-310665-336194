@@ -15,6 +15,16 @@ public class ServicioPropietarios {
 
 	private EstadosPropietario estadosPropietario;
 
+	public ServicioPropietarios() {
+		this.propietarios = new ArrayList<>();
+	}
+
+	public void agregar(Propietario propietario) {
+		if (propietario != null) {
+			this.propietarios.add(propietario);
+		}
+	}
+
 	public boolean puedeTransitar(Propietario propietario) {
 		return propietario.puedeTransitar();
 	}

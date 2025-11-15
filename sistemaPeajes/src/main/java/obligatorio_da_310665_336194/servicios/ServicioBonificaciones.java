@@ -43,6 +43,12 @@ public class ServicioBonificaciones {
 		return bonificacionesPropietario;
 	}
 
+	public void agregar(Bonificacion bonificacion) {
+		if (bonificacion != null) {
+			this.bonificaciones.add(bonificacion);
+		}
+	}
+
 	public List<Bonificacion> getBonificaciones() {
 		return new ArrayList<>(bonificaciones);
 	}

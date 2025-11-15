@@ -1,5 +1,6 @@
 package obligatorio_da_310665_336194.dominio.vehiculo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -26,6 +27,19 @@ public class Vehiculo {
 
 	@Getter
 	private List<Transito> transitos;
+
+	public Vehiculo(String matricula, String modelo, Propietario propietario, String color,
+			CategoríaVehiculo categoría) {
+		this.matricula = matricula;
+		this.modelo = modelo;
+		this.propietario = propietario;
+		this.color = color;
+		this.categoría = categoría;
+		this.transitos = new ArrayList<>();
+		if (propietario != null) {
+			propietario.getVehículos().add(this);
+		}
+	}
 
 	public CategoríaVehiculo getCategoria() {
 		return categoría;

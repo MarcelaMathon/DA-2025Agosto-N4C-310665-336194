@@ -1,5 +1,6 @@
 package obligatorio_da_310665_336194.dominio.propietario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -19,6 +20,8 @@ public class Propietario extends Usuario {
 	@Getter
 	private String cedula;
 	@Getter
+	private String nombre;
+	@Getter
 	private EstadoPropietario estadoActual;
 	@Getter
 	private List<AsignacionDeBonificacion> asignacionesDeBonificacion;
@@ -28,6 +31,18 @@ public class Propietario extends Usuario {
 	private List<Transito> transitos;
 	@Getter
 	private List<Vehiculo> vehículos;
+
+	public Propietario(String cedula, String nombre) {
+		this.cedula = cedula;
+		this.nombre = nombre;
+		this.saldoActual = 1000.0;
+		this.saldoMinimoAlerta = 100.0;
+		this.estadoActual = new Habilitado();
+		this.asignacionesDeBonificacion = new ArrayList<>();
+		this.notificaciones = new ArrayList<>();
+		this.transitos = new ArrayList<>();
+		this.vehículos = new ArrayList<>();
+	}
 
 	public Boolean puedeIngresar() {
 		return null;

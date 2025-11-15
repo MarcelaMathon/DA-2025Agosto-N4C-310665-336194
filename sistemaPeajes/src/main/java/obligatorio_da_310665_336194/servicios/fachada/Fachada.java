@@ -136,4 +136,20 @@ public class Fachada {
 		return servicioPropietarios.cambiarEstado(cedula, nuevoEstado);
 	}
 
+	public void agregar(Propietario propietario) {
+		servicioPropietarios.agregar(propietario);
+	}
+
+	public void agregar(Puesto puesto) {
+		servicioPuestos.agregar(puesto);
+	}
+
+	public void agregar(Vehiculo vehiculo) {
+		servicioVehiculos.agregar(vehiculo);
+	}
+
+	public void agregar(Bonificacion bonificacion) {
+		servicioBonificaciones.agregar(bonificacion);
+	}
+
 }

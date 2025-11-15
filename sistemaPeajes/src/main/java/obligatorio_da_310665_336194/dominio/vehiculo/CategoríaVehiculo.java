@@ -7,4 +7,8 @@ public class CategoríaVehiculo {
 	@Getter
 	private String nombre;
 
+	public CategoríaVehiculo(String nombre) {
+		this.nombre = nombre;
+	}
+
 }
