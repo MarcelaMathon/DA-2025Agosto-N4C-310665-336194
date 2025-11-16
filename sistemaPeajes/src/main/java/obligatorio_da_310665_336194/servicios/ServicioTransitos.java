@@ -54,10 +54,8 @@ public class ServicioTransitos {
 		if (!propietario.esPenalizado()) {
 			String mensajeTransito = fechaHora + " Pasaste por el puesto " + puesto.getNombre()
 					+ " con el vehículo " + matricula;
-			fachada.enviarNotificacion(propietario, mensajeTransito);
 
 			if (propietario.tieneSaldoBajo()) {
-				fachada.enviarSaldoBajo(propietario);
 			}
 		}
 

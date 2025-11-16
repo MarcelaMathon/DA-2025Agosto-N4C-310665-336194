@@ -2,7 +2,7 @@ package obligatorio_da_310665_336194.dominio;
 
 import lombok.Getter;
 
-public class Usuario {
+public abstract class Usuario {
 
 	@Getter
 	private String nombre;

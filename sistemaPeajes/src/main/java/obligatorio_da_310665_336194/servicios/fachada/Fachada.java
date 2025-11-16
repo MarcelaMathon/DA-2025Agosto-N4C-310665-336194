@@ -76,11 +76,10 @@ public class Fachada {
 	}
 
 	public void enviarNotificacion(Propietario propietario, String mensaje) {
-		servicioNotificaciones.enviarNotificacion(propietario, mensaje);
+		// servicioNotificaciones.enviarNotificacion(propietario, mensaje);
 	}
 
 	public void enviarSaldoBajo(Propietario propietario) {
-		servicioNotificaciones.enviarSaldoBajo(propietario);
 	}
 
 	public AsignacionDeBonificacion obtenerBonificacion(Puesto puesto, Propietario propietario) {
@@ -116,7 +115,8 @@ public class Fachada {
 	}
 
 	public Propietario buscarPropietarioPorCedula(String cedula) throws PeajesExceptions {
-		return servicioPropietarios.buscarPropietarioPorCedula(cedula);
+		Propietario propietario = servicioPropietarios.buscarPropietarioPorCedula(cedula);
+		return propietario;
 	}
 
 	public AsignacionDeBonificacion asignarBonificacion(Propietario propietario, Puesto puesto,

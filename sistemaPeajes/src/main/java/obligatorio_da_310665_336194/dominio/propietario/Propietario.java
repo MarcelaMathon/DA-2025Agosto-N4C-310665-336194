@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import obligatorio_da_310665_336194.dominio.Observador;
 import obligatorio_da_310665_336194.dominio.Usuario;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
@@ -69,7 +70,14 @@ public class Propietario extends Usuario {
 	}
 
 	public EstadoPropietario cambiarEstado(EstadoPropietario nuevoEstado) {
-		return this.estadoActual = nuevoEstado;
+		String estadoAnterior = this.estadoActual.getNombreEstado();
+		this.estadoActual = nuevoEstado;
+		String estadoNuevo = this.estadoActual.getNombreEstado();
+
+		// Notificar a los observadores sobre el cambio de estado
+		// notificarCambioEstado(estadoAnterior, estadoNuevo);
+
+		return this.estadoActual;
 	}
 
 	public void descontarSaldo(Double monto) {
