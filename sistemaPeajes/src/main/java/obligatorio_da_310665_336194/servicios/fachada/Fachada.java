@@ -76,10 +76,7 @@ public class Fachada {
 	}
 
 	public void enviarNotificacion(Propietario propietario, String mensaje) {
-		// servicioNotificaciones.enviarNotificacion(propietario, mensaje);
-	}
-
-	public void enviarSaldoBajo(Propietario propietario) {
+		servicioNotificaciones.enviarNotificacion(propietario, mensaje);
 	}
 
 	public AsignacionDeBonificacion obtenerBonificacion(Puesto puesto, Propietario propietario) {
@@ -133,7 +130,8 @@ public class Fachada {
 	}
 
 	public void agregar(Propietario propietario) {
-		servicioPropietarios.agregar(propietario);
+				servicioPropietarios.agregar(propietario);
+		propietario.agregar(servicioNotificaciones);
 	}
 
 	public void agregar(Puesto puesto) {
@@ -155,5 +153,7 @@ public class Fachada {
 	public TipoBonificacion crearTipoBonificacion(String nombre) throws PeajesExceptions {
 		return servicioBonificaciones.crearTipoBonificacion(nombre);
 	}
+
+
 
 }

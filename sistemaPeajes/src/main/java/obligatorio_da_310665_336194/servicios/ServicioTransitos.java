@@ -52,11 +52,9 @@ public class ServicioTransitos {
 		propietario.descontarSaldo(transito.getCosto());
 
 		if (!propietario.esPenalizado()) {
-			String mensajeTransito = fechaHora + " Pasaste por el puesto " + puesto.getNombre()
-					+ " con el vehículo " + matricula;
-
-			if (propietario.tieneSaldoBajo()) {
-			}
+			propietario.notificarTransito("Tránsito realizado");
+			
+			propietario.tieneSaldoBajo(); 
 		}
 
 		transitos.add(transito);

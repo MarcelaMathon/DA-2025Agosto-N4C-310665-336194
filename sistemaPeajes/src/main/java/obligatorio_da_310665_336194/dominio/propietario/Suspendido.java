@@ -7,7 +7,7 @@ public class Suspendido extends EstadoPropietario {
 	}
 
 	public boolean puedeIngresar() {
-		return false;
+		return true;
 	}
 
 	public boolean puedeTransitar() {
@@ -15,11 +15,11 @@ public class Suspendido extends EstadoPropietario {
 	}
 
 	public Boolean recibeNotificaciones() {
-		return null;
+		return true;
 	}
 
 	public Boolean aplicaBonificaciones() {
-		return null;
+		return false;
 	}
 
 }

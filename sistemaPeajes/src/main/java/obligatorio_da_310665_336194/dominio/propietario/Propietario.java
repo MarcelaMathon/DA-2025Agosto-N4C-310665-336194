@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
+import obligatorio_da_310665_336194.dominio.Observable;
+import obligatorio_da_310665_336194.dominio.ObservableConcreto;
 import obligatorio_da_310665_336194.dominio.Observador;
 import obligatorio_da_310665_336194.dominio.Usuario;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
@@ -13,7 +14,7 @@ import obligatorio_da_310665_336194.dominio.transito.Transito;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 
-public class Propietario extends Usuario {
+public class Propietario extends Usuario implements Observable{
 
 	@Getter
 	private Double saldoActual;
@@ -33,6 +34,9 @@ public class Propietario extends Usuario {
 	private List<Transito> transitos;
 	@Getter
 	private List<Vehiculo> vehículos;
+	
+
+	private ObservableConcreto observableConcreto;
 
 	public Propietario(String cedula, String nombre) {
 		this.cedula = cedula;
@@ -44,6 +48,13 @@ public class Propietario extends Usuario {
 		this.notificaciones = new ArrayList<>();
 		this.transitos = new ArrayList<>();
 		this.vehículos = new ArrayList<>();
+		this.observableConcreto = new ObservableConcreto();
+	}
+
+	public enum EventosPropietario {
+		TRANSITO_REALIZADO,
+		SALDO_BAJO,
+		ESTADO_CAMBIADO
 	}
 
 	public Boolean puedeIngresar() {
@@ -54,9 +65,6 @@ public class Propietario extends Usuario {
 		return this.estadoActual.puedeTransitar();
 	}
 
-	/**
-	 *  
-	 */
 	public String getNombreEstado() {
 		return this.estadoActual.getNombreEstado();
 	}
@@ -70,12 +78,11 @@ public class Propietario extends Usuario {
 	}
 
 	public EstadoPropietario cambiarEstado(EstadoPropietario nuevoEstado) {
-		String estadoAnterior = this.estadoActual.getNombreEstado();
 		this.estadoActual = nuevoEstado;
-		String estadoNuevo = this.estadoActual.getNombreEstado();
 
 		// Notificar a los observadores sobre el cambio de estado
-		// notificarCambioEstado(estadoAnterior, estadoNuevo);
+		// Pasamos el propietario directamente como evento
+		observableConcreto.notificarObservadores(this);
 
 		return this.estadoActual;
 	}
@@ -85,10 +92,14 @@ public class Propietario extends Usuario {
 	}
 
 	public boolean tieneSaldoBajo() {
-		return this.saldoActual < this.saldoMinimoAlerta;
+		boolean saldoBajo = this.saldoActual < this.saldoMinimoAlerta;
+		if (saldoBajo) {
+			// Pasamos el propietario directamente como evento
+			observableConcreto.notificarObservadores(this);
+		}
+		return saldoBajo;
 	}
 
-	// Validaciones aplicando Principio de Experto
 	public void validarPuedeTransitar() throws PeajesExceptions {
 		String estado = this.getNombreEstado();
 
@@ -119,6 +130,22 @@ public class Propietario extends Usuario {
 
 	public boolean estaDeshabilitado() {
 		return "Deshabilitado".equals(this.getNombreEstado());
+	}
+
+	
+	@Override
+	public void agregar(Observador observador) {
+		observableConcreto.agregar(observador);
+	}
+
+	@Override
+	public void remover(Observador observador) {
+		observableConcreto.remover(observador);
+	}
+
+	public void notificarTransito(String mensaje) {
+		// Pasamos el propietario directamente como evento
+		observableConcreto.notificarObservadores(this);
 	}
 
 }

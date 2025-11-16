@@ -7,19 +7,19 @@ public class Habilitado extends EstadoPropietario {
 	}
 
 	public boolean puedeIngresar() {
-		return false;
+		return true;
 	}
 
 	public boolean puedeTransitar() {
-		return false;
+		return true;
 	}
 
 	public Boolean recibeNotificaciones() {
-		return null;
+		return true;
 	}
 
 	public Boolean aplicaBonificaciones() {
-		return null;
+		return true;
 	}
 
 }

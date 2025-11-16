@@ -15,11 +15,11 @@ public class Deshabilitado extends EstadoPropietario {
 	}
 
 	public Boolean recibeNotificaciones() {
-		return null;
+		return true;
 	}
 
 	public Boolean aplicaBonificaciones() {
-		return null;
+		return false;
 	}
 
 }
