@@ -21,6 +21,7 @@ public class SistemaPeajesApplication {
 		System.out.println("   Aplicación iniciada correctamente");
 		System.out.println("   Accede a: http://localhost:8080/asignarBonificacion.html");
 		System.out.println("   Accede a: http://localhost:8080/emularTransito.html");
+		System.out.println("   Accede a: http://localhost:8080/cambiarEstado.html");
 		System.out.println("=======================================================\n");
 	}
 

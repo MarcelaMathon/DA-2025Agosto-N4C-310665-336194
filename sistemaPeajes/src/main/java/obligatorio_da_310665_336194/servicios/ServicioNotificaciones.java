@@ -7,6 +7,7 @@ import java.util.List;
 import obligatorio_da_310665_336194.dominio.ObservableAbstracto;
 import obligatorio_da_310665_336194.dominio.Observador;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.propietario.EventoPropietario;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 
 public class ServicioNotificaciones implements Observador {
@@ -29,21 +30,26 @@ public class ServicioNotificaciones implements Observador {
 
 	@Override
 	public void actualizar(ObservableAbstracto origen, Object evento) {
-
-		if (!(evento instanceof Propietario)) {
+		if (!(evento instanceof EventoPropietario)) {
 			return;
 		}
 
-		Propietario propietario = (Propietario) evento;
+		EventoPropietario eventoPropietario = (EventoPropietario) evento;
+		Propietario propietario = eventoPropietario.getPropietario();
+		Propietario.EventosPropietario tipoEvento = eventoPropietario.getTipo();
 
-		if (propietario.tieneSaldoBajo()) {
-			procesarNotificacionSaldoBajo(propietario);
-		}
-
-		procesarNotificacionCambioEstado(propietario);
-
-		if (!propietario.esPenalizado()) {
-			procesarNotificacionTransito(propietario);
+		switch (tipoEvento) {
+			case SALDO_BAJO:
+				procesarNotificacionSaldoBajo(propietario);
+				break;
+			case ESTADO_CAMBIADO:
+				procesarNotificacionCambioEstado(propietario);
+				break;
+			case TRANSITO_REALIZADO:
+				if (!propietario.esPenalizado()) {
+					procesarNotificacionTransito(propietario);
+				}
+				break;
 		}
 	}
 
@@ -72,7 +78,8 @@ public class ServicioNotificaciones implements Observador {
 
 			String mensaje = "[" + new Date() + "] Has realizado un tránsito exitosamente. Saldo restante: $" +
 					propietario.getSaldoActual();
-			/*[Fecha y hora de la notificación] + “Pasaste por el puesto “ + número de
+			/*
+			 * [Fecha y hora de la notificación] + “Pasaste por el puesto “ + número de
 			 * puesto + “con el vehículo” + número de matrícula.
 			 */
 			enviarNotificacion(propietario, mensaje);

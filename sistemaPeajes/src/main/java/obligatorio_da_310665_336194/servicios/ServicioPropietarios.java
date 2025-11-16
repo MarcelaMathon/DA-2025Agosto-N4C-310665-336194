@@ -3,7 +3,6 @@ package obligatorio_da_310665_336194.servicios;
 import java.util.ArrayList;
 
 import obligatorio_da_310665_336194.dominio.propietario.EstadoPropietario;
-import obligatorio_da_310665_336194.dominio.propietario.EstadosPropietario;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 
@@ -12,8 +11,6 @@ import java.util.List;
 public class ServicioPropietarios {
 
 	private ArrayList<Propietario> propietarios;
-
-	private EstadosPropietario estadosPropietario;
 
 	public ServicioPropietarios() {
 		this.propietarios = new ArrayList<>();
@@ -39,7 +36,7 @@ public class ServicioPropietarios {
 	}
 
 	public List<EstadoPropietario> getEstados() {
-		return estadosPropietario.getEstados();
+		return EstadoPropietario.getEstadosDisponibles();
 	}
 
 	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) throws PeajesExceptions {

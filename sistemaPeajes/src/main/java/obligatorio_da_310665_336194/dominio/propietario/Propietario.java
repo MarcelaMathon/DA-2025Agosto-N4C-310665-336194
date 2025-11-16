@@ -3,6 +3,7 @@ package obligatorio_da_310665_336194.dominio.propietario;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.qos.logback.core.joran.conditional.IfAction;
 import lombok.Getter;
 import obligatorio_da_310665_336194.dominio.Observable;
 import obligatorio_da_310665_336194.dominio.ObservableConcreto;
@@ -14,7 +15,7 @@ import obligatorio_da_310665_336194.dominio.transito.Transito;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 
-public class Propietario extends Usuario implements Observable{
+public class Propietario extends Usuario implements Observable {
 
 	@Getter
 	private Double saldoActual;
@@ -34,7 +35,6 @@ public class Propietario extends Usuario implements Observable{
 	private List<Transito> transitos;
 	@Getter
 	private List<Vehiculo> vehículos;
-	
 
 	private ObservableConcreto observableConcreto;
 
@@ -43,7 +43,7 @@ public class Propietario extends Usuario implements Observable{
 		this.nombre = nombre;
 		this.saldoActual = 1000.0;
 		this.saldoMinimoAlerta = 100.0;
-		this.estadoActual = new Habilitado();
+		this.estadoActual = EstadoPropietario.habilitado();
 		this.asignacionesDeBonificacion = new ArrayList<>();
 		this.notificaciones = new ArrayList<>();
 		this.transitos = new ArrayList<>();
@@ -77,12 +77,14 @@ public class Propietario extends Usuario implements Observable{
 		return this.estadoActual.aplicaBonificaciones();
 	}
 
-	public EstadoPropietario cambiarEstado(EstadoPropietario nuevoEstado) {
+	public EstadoPropietario cambiarEstado(EstadoPropietario nuevoEstado) throws PeajesExceptions {
+		if (nuevoEstado.equals(this.estadoActual)) {
+			throw new PeajesExceptions("El nuevo estado debe ser diferente al actual");
+		}
 		this.estadoActual = nuevoEstado;
 
 		// Notificar a los observadores sobre el cambio de estado
-		// Pasamos el propietario directamente como evento
-		observableConcreto.notificarObservadores(this);
+		observableConcreto.notificarObservadores(new EventoPropietario(this, EventosPropietario.ESTADO_CAMBIADO));
 
 		return this.estadoActual;
 	}
@@ -94,8 +96,7 @@ public class Propietario extends Usuario implements Observable{
 	public boolean tieneSaldoBajo() {
 		boolean saldoBajo = this.saldoActual < this.saldoMinimoAlerta;
 		if (saldoBajo) {
-			// Pasamos el propietario directamente como evento
-			observableConcreto.notificarObservadores(this);
+			observableConcreto.notificarObservadores(new EventoPropietario(this, EventosPropietario.SALDO_BAJO));
 		}
 		return saldoBajo;
 	}
@@ -132,7 +133,6 @@ public class Propietario extends Usuario implements Observable{
 		return "Deshabilitado".equals(this.getNombreEstado());
 	}
 
-	
 	@Override
 	public void agregar(Observador observador) {
 		observableConcreto.agregar(observador);
@@ -144,8 +144,7 @@ public class Propietario extends Usuario implements Observable{
 	}
 
 	public void notificarTransito(String mensaje) {
-		// Pasamos el propietario directamente como evento
-		observableConcreto.notificarObservadores(this);
+		observableConcreto.notificarObservadores(new EventoPropietario(this, EventosPropietario.TRANSITO_REALIZADO));
 	}
 
 }
