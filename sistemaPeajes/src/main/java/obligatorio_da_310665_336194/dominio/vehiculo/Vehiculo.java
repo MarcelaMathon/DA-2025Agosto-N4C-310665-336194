@@ -55,4 +55,20 @@ public class Vehiculo {
 		}
 	}
 
+	public int getCantidadTransitos() {
+		return transitos != null ? transitos.size() : 0;
+	}
+
+	public Double getMontoTotalGastado() {
+		if (transitos == null) {
+			return 0.0;
+		}
+
+		Double total = 0.0;
+		for (Transito transito : transitos) {
+			total += transito.getCosto() != null ? transito.getCosto() : 0.0;
+		}
+		return total;
+	}
+
 }

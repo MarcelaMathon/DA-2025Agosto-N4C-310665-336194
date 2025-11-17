@@ -47,4 +47,8 @@ public class Transito {
         return this.costo;
     }
 
+    public void setPropietario(Propietario propietario) {
+        this.propietario = propietario;
+    }
+
 }

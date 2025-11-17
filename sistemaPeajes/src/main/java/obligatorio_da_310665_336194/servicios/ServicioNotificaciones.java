@@ -91,8 +91,6 @@ public class ServicioNotificaciones implements Observador {
 		notificaciones.add(notificacion);
 		propietario.getNotificaciones().add(notificacion);
 
-		// Log para debugging
-		System.out.println("📧 Notificación enviada a " + propietario.getNombre() + ": " + mensaje);
 	}
 
 }

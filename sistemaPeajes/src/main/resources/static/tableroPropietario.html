@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tablero de control del propietario</title>
+    <link rel="stylesheet" href="styles/tableroPropietario.css" />
+    <script src="vistaWeb.js"></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="icon">👤</div>
+        <h1>Tablero de control del propietario</h1>
+      </div>
+      <button class="salir-btn" onclick="debugData()" style="margin-right: 10px; background: orange;">Debug</button>
+      <button class="salir-btn" onclick="window.location.href='/'">Salir</button>
+    </div>
+
+    <!-- Resumen del propietario -->
+    <div class="resumen-propietario">
+      <h2>Resumen del propietario</h2>
+      <div class="resumen-grid">
+        <div class="resumen-item">
+          <span class="resumen-label">Nombre completo</span>
+          <span class="resumen-value" id="nombrePropietario">-</span>
+        </div>
+        <div class="resumen-item">
+          <span class="resumen-label">Estado</span>
+          <span class="resumen-value" id="estadoPropietario">-</span>
+        </div>
+        <div class="resumen-item">
+          <span class="resumen-label">Saldo actual</span>
+          <span class="resumen-value monto" id="saldoActual">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid principal -->
+    <div class="main-grid">
+      <!-- Bonificaciones asignadas -->
+      <div class="section">
+        <h3>Bonificaciones asignadas</h3>
+        <div class="table-container">
+          <table id="tablaBonificaciones">
+            <thead>
+              <tr>
+                <th>Bonificación</th>
+                <th>Puesto</th>
+                <th>Fecha asignada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="3" class="empty-state">Cargando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Vehículos registrados -->
+      <div class="section">
+        <h3>Vehículos registrados</h3>
+        <div class="table-container">
+          <table id="tablaVehiculos">
+            <thead>
+              <tr>
+                <th>Matrícula</th>
+                <th>Modelo</th>
+                <th>Color</th>
+                <th>Tránsitos</th>
+                <th>Monto total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" class="empty-state">Cargando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tránsitos realizados -->
+    <div class="transitos-section">
+      <h3>Tránsitos realizados</h3>
+      <div class="table-container">
+        <table id="tablaTransitos">
+          <thead>
+            <tr>
+              <th>Puesto</th>
+              <th>Matrícula</th>
+              <th>Categoría</th>
+              <th>Monto tarifa</th>
+              <th>Bonificación</th>
+              <th>Monto bonificación</th>
+              <th>Monto pagado</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" class="empty-state">Cargando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Notificaciones del sistema -->
+    <div class="notificaciones-section">
+      <h3>Notificaciones del sistema</h3>
+      <button class="borrar-notificaciones-btn" onclick="borrarNotificaciones()">
+        Borrar notificaciones
+      </button>
+      <div class="table-container">
+        <table id="tablaNotificaciones">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Mensaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="2" class="empty-state">Cargando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="utilesVista.js"></script>
+    <script>
+      // Configurar inicialización de vista
+      urlIniciarVista = "/tableroPropietario/inicializar";
+      parametrosInicioVista = "cedula=12345678"; // Opciones: 12345678, 23456789, 34567890, 45678901
+      
+      // Función para debug
+      function debugData() {
+        submit("/tableroPropietario/debug", "cedula=12345678");
+      }
+      
+      function mostrar_debug(data) {
+        console.log("Debug response:", data);
+      }
+
+      // Variables globales
+      let propietarioActual = null;
+
+      // Variables para almacenar los datos
+      let datosTablero = {
+        propietario: null,
+        bonificaciones: [],
+        transitos: [],
+        vehiculos: [],
+        notificaciones: [],
+        cedula: null
+      };
+
+      // Funciones para procesar cada respuesta individual
+      function mostrar_propietario(propietario) {
+        console.log("Mostrando propietario:", propietario);
+        datosTablero.propietario = propietario;
+        propietarioActual = propietario;
+        
+        // Mostrar resumen del propietario
+        document.getElementById('nombrePropietario').textContent = propietario.nombre;
+        document.getElementById('estadoPropietario').textContent = propietario.estadoActual;
+        document.getElementById('estadoPropietario').className = 
+          propietario.estadoActual === 'Habilitado' ? 'resumen-value estado-activo' : 'resumen-value estado-inactivo';
+        document.getElementById('saldoActual').textContent = '$ ' + propietario.saldoActual.toFixed(2);
+      }
+
+      function mostrar_bonificaciones(bonificaciones) {
+        datosTablero.bonificaciones = bonificaciones;
+        mostrarBonificaciones(bonificaciones);
+      }
+
+      function mostrar_vehiculos(vehiculos) {
+        console.log("Mostrando vehículos:", vehiculos);
+        datosTablero.vehiculos = vehiculos;
+        mostrarVehiculos(vehiculos);
+      }
+
+      function mostrar_transitos(transitos) {
+        console.log("Mostrando tránsitos:", transitos);
+        datosTablero.transitos = transitos;
+        mostrarTransitos(transitos);
+      }
+
+      function mostrar_notificaciones(notificaciones) {
+        console.log("Mostrando notificaciones:", notificaciones);
+        datosTablero.notificaciones = notificaciones;
+        mostrarNotificaciones(notificaciones);
+      }
+
+      function mostrar_cedula(cedula) {
+        console.log("Cedula recibida:", cedula);
+        datosTablero.cedula = cedula;
+      }
+
+      function mostrar_bonificaciones(bonificaciones) {
+        console.log("Mostrando bonificaciones:", bonificaciones);
+        datosTablero.bonificaciones = bonificaciones;
+        mostrarBonificaciones(bonificaciones);
+      }
+
+      function mostrarBonificaciones(bonificaciones) {
+        const tbody = document.querySelector('#tablaBonificaciones tbody');
+        tbody.innerHTML = '';
+        
+        if (!bonificaciones || bonificaciones.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No hay bonificaciones asignadas</td></tr>';
+          return;
+        }
+        
+        bonificaciones.forEach(bonificacion => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${bonificacion.bonificacionNombre}</td>
+            <td>${bonificacion.puestoNombre}</td>
+            <td class="fecha">${formatearFecha(bonificacion.fechaAsignacion)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function mostrarVehiculos(vehiculos) {
+        const tbody = document.querySelector('#tablaVehiculos tbody');
+        tbody.innerHTML = '';
+        
+        if (!vehiculos || vehiculos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No hay vehículos registrados</td></tr>';
+          return;
+        }
+        
+        vehiculos.forEach(vehiculo => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${vehiculo.matricula}</strong></td>
+            <td>${vehiculo.modelo}</td>
+            <td>${vehiculo.color}</td>
+            <td>${vehiculo.cantidadTransitos}</td>
+            <td class="monto">$ ${vehiculo.montoTotalGastado.toFixed(2)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function mostrarTransitos(transitos) {
+        const tbody = document.querySelector('#tablaTransitos tbody');
+        tbody.innerHTML = '';
+        
+        if (!transitos || transitos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No hay tránsitos realizados</td></tr>';
+          return;
+        }
+        
+        // Ordenar por fecha más reciente
+        transitos.sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora));
+        
+        transitos.forEach(transito => {
+          const fecha = new Date(transito.fechaHora);
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${transito.puestoNombre}</td>
+            <td><strong>${transito.vehiculoMatricula}</strong></td>
+            <td>${transito.vehiculoCategoria}</td>
+            <td class="monto">$ ${transito.montoTarifa.toFixed(2)}</td>
+            <td>${transito.bonificacionNombre}</td>
+            <td class="monto">-$ ${transito.montoBonificacion.toFixed(2)}</td>
+            <td class="monto">$ ${transito.montoPagado.toFixed(2)}</td>
+            <td class="fecha">${formatearFecha(fecha)}</td>
+            <td class="fecha">${formatearHora(fecha)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function mostrarNotificaciones(notificaciones) {
+        const tbody = document.querySelector('#tablaNotificaciones tbody');
+        tbody.innerHTML = '';
+        
+        if (!notificaciones || notificaciones.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="2" class="empty-state">No hay notificaciones para borrar”</td></tr>';
+          return;
+        }
+        
+        // Ordenar notificaciones por fecha más reciente
+        const notificacionesOrdenadas = [...notificaciones]
+          .sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora));
+        
+        notificacionesOrdenadas.forEach(notificacion => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="fecha">${formatearFechaHora(new Date(notificacion.fechaHora))}</td>
+            <td>${notificacion.mensaje}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function borrarNotificaciones() {
+        if (!datosTablero.cedula) return;
+        
+        if (confirm('¿Está seguro de que desea borrar todas las notificaciones?')) {
+          submit("/tableroPropietario/borrarNotificaciones", "cedula=" + datosTablero.cedula);
+        }
+      }
+
+      // Función para manejar respuesta de borrar notificaciones
+      function mostrar_notificacionesBorradas(mensaje) {
+        const tbody = document.querySelector('#tablaNotificaciones tbody');
+        tbody.innerHTML = '<tr><td colspan="2" class="empty-state">No hay notificaciones para borrar</td></tr>';
+        alert(mensaje);
+      }
+
+      // Funciones auxiliares para formateo
+      function formatearFecha(fecha) {
+        if (!fecha) return '-';
+        const f = new Date(fecha);
+        return f.toLocaleDateString('es-ES');
+      }
+
+      function formatearHora(fecha) {
+        if (!fecha) return '-';
+        const f = new Date(fecha);
+        return f.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      function formatearFechaHora(fecha) {
+        if (!fecha) return '-';
+        return formatearFecha(fecha) + ' ' + formatearHora(fecha);
+      }
+
+      // Manejo de errores
+      function excepcionDeAplicacion(mensaje) {
+        alert('Error: ' + mensaje);
+      }
+    </script>
+  </body>
+</html>

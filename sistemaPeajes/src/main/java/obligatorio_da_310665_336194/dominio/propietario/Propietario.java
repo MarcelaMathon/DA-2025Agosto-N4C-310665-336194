@@ -3,7 +3,6 @@ package obligatorio_da_310665_336194.dominio.propietario;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
 import lombok.Getter;
 import obligatorio_da_310665_336194.dominio.Observable;
 import obligatorio_da_310665_336194.dominio.ObservableConcreto;
