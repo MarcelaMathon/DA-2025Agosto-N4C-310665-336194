@@ -53,15 +53,13 @@ public class ServicioTransitos {
 		propietario.validarSaldoSuficiente(transito.getCosto());
 		propietario.descontarSaldo(transito.getCosto());
 
-		if (!propietario.esPenalizado()) {
-			propietario.notificarTransito("Tránsito realizado");
-			
-			propietario.tieneSaldoBajo(); 
-		}
-
-		// Agregar el tránsito a las listas correspondientes
 		transitos.add(transito);
 		vehiculo.getTransitos().add(transito);
+
+		if (!propietario.esPenalizado()) {
+			propietario.notificarTransito("Tránsito realizado");
+			propietario.tieneSaldoBajo();
+		}
 
 		return transito;
 	}

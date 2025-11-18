@@ -67,7 +67,6 @@ public class ControladorAsignarBonificacion {
 
 		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
 		Puesto puesto = puestos.get(posPuesto);
-
 		TipoBonificacion tipoBonificacion = fachada.crearTipoBonificacion(nombreBonificacion);
 
 		fachada.asignarBonificacion(propietario, puesto, tipoBonificacion);

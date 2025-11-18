@@ -3,15 +3,23 @@ package obligatorio_da_310665_336194.controladores;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import obligatorio_da_310665_336194.dominio.ObservableAbstracto;
+import obligatorio_da_310665_336194.dominio.Observador;
+import obligatorio_da_310665_336194.utils.ConexionNavegador;
 import obligatorio_da_310665_336194.utils.Respuesta;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.propietario.EventoPropietario;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.transito.Transito;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
@@ -26,62 +34,149 @@ import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 @RestController
 @RequestMapping("/tableroPropietario")
 @Scope("session")
-public class ControladorTableroPropietario {
+public class ControladorTableroPropietario implements Observador {
 
 	private Fachada fachada = Fachada.getInstancia();
+	private Propietario propietarioActual;
+
+	private final ConexionNavegador conexionNavegador;
+
+	public ControladorTableroPropietario(@Autowired ConexionNavegador conexionNavegador) {
+		// La conexión se inicializa cuando se registra el SSE
+		this.conexionNavegador = conexionNavegador;
+	}
+
+	@GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public SseEmitter registrarSSE() {
+		// Establecer la conexión SSE con el navegador
+		conexionNavegador.conectarSSE();
+		return conexionNavegador.getConexionSSE();
+	}
 
 	@PostMapping("/inicializar")
 	public List<Respuesta> inicializarTablero(@RequestParam String cedula) throws PeajesExceptions {
-		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
-		
+		propietarioActual = fachada.buscarPropietarioPorCedula(cedula);
+
+		// Registrar este controlador como observador del propietario
+		propietarioActual.agregar(this);
+
 		PropietarioTableroDTO propietarioDTO = new PropietarioTableroDTO(
-				propietario.getNombre(),
-				propietario.getNombreEstado(), 
-				propietario.getSaldoActual()
-		);
-		
-		List<AsignacionDeBonificacion> bonificacionesOrig = fachada.obtenerBonificacionesPropietario(propietario);
+				propietarioActual.getNombre(),
+				propietarioActual.getNombreEstado(),
+				propietarioActual.getSaldoActual());
+
+		List<AsignacionDeBonificacion> bonificacionesOrig = fachada.obtenerBonificacionesPropietario(propietarioActual);
 		List<BonificacionTableroDTO> bonificacionesDTO = new ArrayList<>();
 		for (AsignacionDeBonificacion b : bonificacionesOrig) {
 			bonificacionesDTO.add(BonificacionTableroDTO.desde(b));
 		}
-		
+
 		// Convertir tránsitos a DTOs
-		List<Transito> transitosOrig = fachada.getTransitosPropietario(propietario);
+		List<Transito> transitosOrig = fachada.getTransitosPropietario(propietarioActual);
 		List<TransitoTableroDTO> transitosDTO = new ArrayList<>();
 		for (Transito t : transitosOrig) {
 			transitosDTO.add(TransitoTableroDTO.desde(t));
 		}
-		
+
 		// Convertir vehículos a DTOs
-		List<Vehiculo> vehiculosOrig = fachada.getVehiculosPropietario(propietario);
+		List<Vehiculo> vehiculosOrig = fachada.getVehiculosPropietario(propietarioActual);
 		List<VehiculoTableroDTO> vehiculosDTO = new ArrayList<>();
 		for (Vehiculo v : vehiculosOrig) {
 			vehiculosDTO.add(VehiculoTableroDTO.desde(v));
 		}
-		
+
 		List<NotificacionTableroDTO> notificacionesDTO = new ArrayList<>();
-		for (Notificacion n : propietario.getNotificaciones()) {
+		for (Notificacion n : propietarioActual.getNotificaciones()) {
 			notificacionesDTO.add(NotificacionTableroDTO.desde(n));
 		}
 
 		return Respuesta.lista(
-				new Respuesta("propietario", propietarioDTO), 
+				new Respuesta("propietario", propietarioDTO),
 				new Respuesta("bonificaciones", bonificacionesDTO),
 				new Respuesta("transitos", transitosDTO),
 				new Respuesta("vehiculos", vehiculosDTO),
 				new Respuesta("notificaciones", notificacionesDTO),
-				new Respuesta("cedula", propietario.getCedula())
-		);
+				new Respuesta("cedula", propietarioActual.getCedula()));
 	}
-	
+
 	@PostMapping("/borrarNotificaciones")
 	public List<Respuesta> borrarNotificaciones(@RequestParam String cedula) throws PeajesExceptions {
 		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
-		
+
 		fachada.borrarNotificaciones(propietario);
-		
+
 		return Respuesta.lista(new Respuesta("notificacionesBorradas", "Notificaciones borradas exitosamente"));
+	}
+
+	@Override
+	public void actualizar(ObservableAbstracto origen, Object evento) {
+		if (!(evento instanceof EventoPropietario)) {
+			return;
+		}
+
+		EventoPropietario eventoPropietario = (EventoPropietario) evento;
+		Propietario propietario = eventoPropietario.getPropietario();
+
+		// Solo procesar si el evento es del propietario que está viendo este tablero
+		if (!propietario.equals(propietarioActual)) {
+			return;
+		}
+
+		Propietario.EventosPropietario tipoEvento = eventoPropietario.getTipo();
+
+		// Actualizar datos según el tipo de evento
+		switch (tipoEvento) {
+			case TRANSITO_REALIZADO:
+				// Enviar tránsitos, propietario y notificaciones juntos
+				conexionNavegador.enviarJSON(Respuesta.lista(transitos(), propietario(), notificaciones()));
+				break;
+			case SALDO_BAJO:
+				// Enviar propietario y notificaciones juntos
+				conexionNavegador.enviarJSON(Respuesta.lista(propietario(), notificaciones()));
+				break;
+			case ESTADO_CAMBIADO:
+				// Enviar propietario y notificaciones juntos
+				conexionNavegador.enviarJSON(Respuesta.lista(propietario(), notificaciones()));
+				break;
+			case BONIFICACION_ASIGNADA:
+				// Enviar bonificaciones y notificaciones juntos
+				conexionNavegador.enviarJSON(Respuesta.lista(bonificaciones(), notificaciones()));
+				break;
+		}
+	}
+
+	private Respuesta propietario() {
+		PropietarioTableroDTO propietarioDTO = new PropietarioTableroDTO(
+				propietarioActual.getNombre(),
+				propietarioActual.getNombreEstado(),
+				propietarioActual.getSaldoActual());
+		return new Respuesta("propietario", propietarioDTO);
+	}
+
+	private Respuesta transitos() {
+		List<Transito> transitosOrig = fachada.getTransitosPropietario(propietarioActual);
+		List<TransitoTableroDTO> transitosDTO = new ArrayList<>();
+		for (Transito t : transitosOrig) {
+			transitosDTO.add(TransitoTableroDTO.desde(t));
+		}
+		return new Respuesta("transitos", transitosDTO);
+	}
+
+	private Respuesta notificaciones() {
+		List<NotificacionTableroDTO> notificacionesDTO = new ArrayList<>();
+		for (Notificacion n : propietarioActual.getNotificaciones()) {
+			notificacionesDTO.add(NotificacionTableroDTO.desde(n));
+		}
+		return new Respuesta("notificaciones", notificacionesDTO);
+	}
+
+	private Respuesta bonificaciones() {
+		List<AsignacionDeBonificacion> bonificacionesOrig = fachada.obtenerBonificacionesPropietario(propietarioActual);
+		List<BonificacionTableroDTO> bonificacionesDTO = new ArrayList<>();
+		for (AsignacionDeBonificacion b : bonificacionesOrig) {
+			bonificacionesDTO.add(BonificacionTableroDTO.desde(b));
+		}
+		return new Respuesta("bonificaciones", bonificacionesDTO);
 	}
 
 }

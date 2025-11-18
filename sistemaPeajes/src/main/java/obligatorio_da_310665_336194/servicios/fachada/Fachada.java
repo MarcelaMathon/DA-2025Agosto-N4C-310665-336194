@@ -130,7 +130,7 @@ public class Fachada {
 	}
 
 	public void agregar(Propietario propietario) {
-				servicioPropietarios.agregar(propietario);
+		servicioPropietarios.agregar(propietario);
 		propietario.agregar(servicioNotificaciones);
 	}
 
@@ -153,7 +153,5 @@ public class Fachada {
 	public TipoBonificacion crearTipoBonificacion(String nombre) throws PeajesExceptions {
 		return servicioBonificaciones.crearTipoBonificacion(nombre);
 	}
-
-
 
 }

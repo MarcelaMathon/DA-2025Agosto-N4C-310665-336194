@@ -14,7 +14,7 @@ public class Puesto {
 	@Getter
 	private String direccion;
 	@Getter
-	private AsignacionDeBonificacion bonificacionAsignada;
+	private List<AsignacionDeBonificacion> asignacionesDeBonificacion;
 	@Getter
 	private List<Transito> transitos;
 	@Getter
@@ -25,6 +25,7 @@ public class Puesto {
 		this.direccion = direccion;
 		this.transitos = new ArrayList<>();
 		this.tarifas = new ArrayList<>();
+		this.asignacionesDeBonificacion = new ArrayList<>();
 	}
 
 	public List<Tarifa> tarifasDePuesto(Puesto puesto) {

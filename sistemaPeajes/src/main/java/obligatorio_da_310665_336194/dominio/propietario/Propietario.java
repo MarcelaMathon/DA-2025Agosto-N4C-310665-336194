@@ -53,7 +53,8 @@ public class Propietario extends Usuario implements Observable {
 	public enum EventosPropietario {
 		TRANSITO_REALIZADO,
 		SALDO_BAJO,
-		ESTADO_CAMBIADO
+		ESTADO_CAMBIADO,
+		BONIFICACION_ASIGNADA
 	}
 
 	public Boolean puedeIngresar() {
@@ -144,6 +145,10 @@ public class Propietario extends Usuario implements Observable {
 
 	public void notificarTransito(String mensaje) {
 		observableConcreto.notificarObservadores(new EventoPropietario(this, EventosPropietario.TRANSITO_REALIZADO));
+	}
+
+	public void notificarBonificacion() {
+		observableConcreto.notificarObservadores(new EventoPropietario(this, EventosPropietario.BONIFICACION_ASIGNADA));
 	}
 
 }

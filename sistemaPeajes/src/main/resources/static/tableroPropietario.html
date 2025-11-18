@@ -6,6 +6,7 @@
     <title>Tablero de control del propietario</title>
     <link rel="stylesheet" href="styles/tableroPropietario.css" />
     <script src="vistaWeb.js"></script>
+    <script src="sse.js"></script>
   </head>
   <body>
     <!-- Header -->
@@ -14,8 +15,16 @@
         <div class="icon">👤</div>
         <h1>Tablero de control del propietario</h1>
       </div>
-      <button class="salir-btn" onclick="debugData()" style="margin-right: 10px; background: orange;">Debug</button>
-      <button class="salir-btn" onclick="window.location.href='/'">Salir</button>
+      <button
+        class="salir-btn"
+        onclick="debugData()"
+        style="margin-right: 10px; background: orange"
+      >
+        Debug
+      </button>
+      <button class="salir-btn" onclick="window.location.href='/'">
+        Salir
+      </button>
     </div>
 
     <!-- Resumen del propietario -->
@@ -114,7 +123,10 @@
     <!-- Notificaciones del sistema -->
     <div class="notificaciones-section">
       <h3>Notificaciones del sistema</h3>
-      <button class="borrar-notificaciones-btn" onclick="borrarNotificaciones()">
+      <button
+        class="borrar-notificaciones-btn"
+        onclick="borrarNotificaciones()"
+      >
         Borrar notificaciones
       </button>
       <div class="table-container">
@@ -139,12 +151,15 @@
       // Configurar inicialización de vista
       urlIniciarVista = "/tableroPropietario/inicializar";
       parametrosInicioVista = "cedula=12345678"; // Opciones: 12345678, 23456789, 34567890, 45678901
-      
+
+      // Configurar SSE para recibir actualizaciones en tiempo real
+      urlRegistroSSE = "/tableroPropietario/registrarSSE";
+
       // Función para debug
       function debugData() {
         submit("/tableroPropietario/debug", "cedula=12345678");
       }
-      
+
       function mostrar_debug(data) {
         console.log("Debug response:", data);
       }
@@ -159,7 +174,7 @@
         transitos: [],
         vehiculos: [],
         notificaciones: [],
-        cedula: null
+        cedula: null,
       };
 
       // Funciones para procesar cada respuesta individual
@@ -167,13 +182,18 @@
         console.log("Mostrando propietario:", propietario);
         datosTablero.propietario = propietario;
         propietarioActual = propietario;
-        
+
         // Mostrar resumen del propietario
-        document.getElementById('nombrePropietario').textContent = propietario.nombre;
-        document.getElementById('estadoPropietario').textContent = propietario.estadoActual;
-        document.getElementById('estadoPropietario').className = 
-          propietario.estadoActual === 'Habilitado' ? 'resumen-value estado-activo' : 'resumen-value estado-inactivo';
-        document.getElementById('saldoActual').textContent = '$ ' + propietario.saldoActual.toFixed(2);
+        document.getElementById("nombrePropietario").textContent =
+          propietario.nombre;
+        document.getElementById("estadoPropietario").textContent =
+          propietario.estadoActual;
+        document.getElementById("estadoPropietario").className =
+          propietario.estadoActual === "Habilitado"
+            ? "resumen-value estado-activo"
+            : "resumen-value estado-inactivo";
+        document.getElementById("saldoActual").textContent =
+          "$ " + propietario.saldoActual.toFixed(2);
       }
 
       function mostrar_bonificaciones(bonificaciones) {
@@ -211,36 +231,40 @@
       }
 
       function mostrarBonificaciones(bonificaciones) {
-        const tbody = document.querySelector('#tablaBonificaciones tbody');
-        tbody.innerHTML = '';
-        
+        const tbody = document.querySelector("#tablaBonificaciones tbody");
+        tbody.innerHTML = "";
+
         if (!bonificaciones || bonificaciones.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No hay bonificaciones asignadas</td></tr>';
+          tbody.innerHTML =
+            '<tr><td colspan="3" class="empty-state">No hay bonificaciones asignadas</td></tr>';
           return;
         }
-        
-        bonificaciones.forEach(bonificacion => {
-          const tr = document.createElement('tr');
+
+        bonificaciones.forEach((bonificacion) => {
+          const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${bonificacion.bonificacionNombre}</td>
             <td>${bonificacion.puestoNombre}</td>
-            <td class="fecha">${formatearFecha(bonificacion.fechaAsignacion)}</td>
+            <td class="fecha">${formatearFecha(
+              bonificacion.fechaAsignacion
+            )}</td>
           `;
           tbody.appendChild(tr);
         });
       }
 
       function mostrarVehiculos(vehiculos) {
-        const tbody = document.querySelector('#tablaVehiculos tbody');
-        tbody.innerHTML = '';
-        
+        const tbody = document.querySelector("#tablaVehiculos tbody");
+        tbody.innerHTML = "";
+
         if (!vehiculos || vehiculos.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No hay vehículos registrados</td></tr>';
+          tbody.innerHTML =
+            '<tr><td colspan="5" class="empty-state">No hay vehículos registrados</td></tr>';
           return;
         }
-        
-        vehiculos.forEach(vehiculo => {
-          const tr = document.createElement('tr');
+
+        vehiculos.forEach((vehiculo) => {
+          const tr = document.createElement("tr");
           tr.innerHTML = `
             <td><strong>${vehiculo.matricula}</strong></td>
             <td>${vehiculo.modelo}</td>
@@ -253,21 +277,22 @@
       }
 
       function mostrarTransitos(transitos) {
-        const tbody = document.querySelector('#tablaTransitos tbody');
-        tbody.innerHTML = '';
-        
+        const tbody = document.querySelector("#tablaTransitos tbody");
+        tbody.innerHTML = "";
+
         if (!transitos || transitos.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No hay tránsitos realizados</td></tr>';
+          tbody.innerHTML =
+            '<tr><td colspan="9" class="empty-state">No hay tránsitos realizados</td></tr>';
           return;
         }
-        
+
         // Ordenar por fecha más reciente
         transitos.sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora));
-        
-        transitos.forEach(transito => {
+
+        transitos.forEach((transito) => {
           const fecha = new Date(transito.fechaHora);
-          
-          const tr = document.createElement('tr');
+
+          const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${transito.puestoNombre}</td>
             <td><strong>${transito.vehiculoMatricula}</strong></td>
@@ -284,22 +309,26 @@
       }
 
       function mostrarNotificaciones(notificaciones) {
-        const tbody = document.querySelector('#tablaNotificaciones tbody');
-        tbody.innerHTML = '';
-        
+        const tbody = document.querySelector("#tablaNotificaciones tbody");
+        tbody.innerHTML = "";
+
         if (!notificaciones || notificaciones.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="2" class="empty-state">No hay notificaciones para borrar”</td></tr>';
+          tbody.innerHTML =
+            '<tr><td colspan="2" class="empty-state">No hay notificaciones para borrar”</td></tr>';
           return;
         }
-        
+
         // Ordenar notificaciones por fecha más reciente
-        const notificacionesOrdenadas = [...notificaciones]
-          .sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora));
-        
-        notificacionesOrdenadas.forEach(notificacion => {
-          const tr = document.createElement('tr');
+        const notificacionesOrdenadas = [...notificaciones].sort(
+          (a, b) => new Date(b.fechaHora) - new Date(a.fechaHora)
+        );
+
+        notificacionesOrdenadas.forEach((notificacion) => {
+          const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td class="fecha">${formatearFechaHora(new Date(notificacion.fechaHora))}</td>
+            <td class="fecha">${formatearFechaHora(
+              new Date(notificacion.fechaHora)
+            )}</td>
             <td>${notificacion.mensaje}</td>
           `;
           tbody.appendChild(tr);
@@ -308,40 +337,49 @@
 
       function borrarNotificaciones() {
         if (!datosTablero.cedula) return;
-        
-        if (confirm('¿Está seguro de que desea borrar todas las notificaciones?')) {
-          submit("/tableroPropietario/borrarNotificaciones", "cedula=" + datosTablero.cedula);
+
+        if (
+          confirm("¿Está seguro de que desea borrar todas las notificaciones?")
+        ) {
+          submit(
+            "/tableroPropietario/borrarNotificaciones",
+            "cedula=" + datosTablero.cedula
+          );
         }
       }
 
       // Función para manejar respuesta de borrar notificaciones
       function mostrar_notificacionesBorradas(mensaje) {
-        const tbody = document.querySelector('#tablaNotificaciones tbody');
-        tbody.innerHTML = '<tr><td colspan="2" class="empty-state">No hay notificaciones para borrar</td></tr>';
+        const tbody = document.querySelector("#tablaNotificaciones tbody");
+        tbody.innerHTML =
+          '<tr><td colspan="2" class="empty-state">No hay notificaciones para borrar</td></tr>';
         alert(mensaje);
       }
 
       // Funciones auxiliares para formateo
       function formatearFecha(fecha) {
-        if (!fecha) return '-';
+        if (!fecha) return "-";
         const f = new Date(fecha);
-        return f.toLocaleDateString('es-ES');
+        return f.toLocaleDateString("es-ES");
       }
 
       function formatearHora(fecha) {
-        if (!fecha) return '-';
+        if (!fecha) return "-";
         const f = new Date(fecha);
-        return f.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        return f.toLocaleTimeString("es-ES", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
       }
 
       function formatearFechaHora(fecha) {
-        if (!fecha) return '-';
-        return formatearFecha(fecha) + ' ' + formatearHora(fecha);
+        if (!fecha) return "-";
+        return formatearFecha(fecha) + " " + formatearHora(fecha);
       }
 
       // Manejo de errores
       function excepcionDeAplicacion(mensaje) {
-        alert('Error: ' + mensaje);
+        alert("Error: " + mensaje);
       }
     </script>
   </body>
