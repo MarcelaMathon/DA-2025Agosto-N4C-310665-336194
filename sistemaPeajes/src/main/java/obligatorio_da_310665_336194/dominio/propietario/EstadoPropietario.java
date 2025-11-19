@@ -24,21 +24,17 @@ public abstract class EstadoPropietario {
 			SUSPENDIDO,
 			PENALIZADO);
 
+	public static List<EstadoPropietario> getEstadosDisponibles() {
+		return ESTADOS_DISPONIBLES;
+	}
+
 	public abstract boolean puedeIngresar();
 
 	public abstract boolean puedeTransitar();
 
-	public String getNombreEstado() {
-		return this.nombre;
-	}
-
 	public abstract Boolean recibeNotificaciones();
 
 	public abstract Boolean aplicaBonificaciones();
-
-	public static List<EstadoPropietario> getEstadosDisponibles() {
-		return ESTADOS_DISPONIBLES;
-	}
 
 	public static EstadoPropietario obtenerPorNombre(String nombreEstado) throws PeajesExceptions {
 		for (EstadoPropietario estado : ESTADOS_DISPONIBLES) {
@@ -47,6 +43,10 @@ public abstract class EstadoPropietario {
 			}
 		}
 		throw new PeajesExceptions("Estado no encontrado: " + nombreEstado);
+	}
+
+	public String getNombreEstado() {
+		return this.nombre;
 	}
 
 	public static EstadoPropietario habilitado() {
