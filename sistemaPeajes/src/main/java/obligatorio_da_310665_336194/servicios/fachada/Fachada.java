@@ -11,9 +11,12 @@ import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
 import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
 import obligatorio_da_310665_336194.dominio.transito.Transito;
+import obligatorio_da_310665_336194.dominio.usuario.Administrador;
+import obligatorio_da_310665_336194.dominio.usuario.Sesion;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 
+import java.util.Collection;
 import java.util.Date;
 
 import obligatorio_da_310665_336194.servicios.ServicioBonificaciones;
@@ -21,6 +24,7 @@ import obligatorio_da_310665_336194.servicios.ServicioNotificaciones;
 import obligatorio_da_310665_336194.servicios.ServicioPropietarios;
 import obligatorio_da_310665_336194.servicios.ServicioPuestos;
 import obligatorio_da_310665_336194.servicios.ServicioTransitos;
+import obligatorio_da_310665_336194.servicios.ServicioUsuarios;
 import obligatorio_da_310665_336194.servicios.ServicioVehiculos;
 
 public class Fachada {
@@ -39,6 +43,8 @@ public class Fachada {
 
 	private ServicioTransitos servicioTransitos;
 
+	private ServicioUsuarios servicioUsuarios;
+
 	private Fachada() {
 		this.servicioNotificaciones = new ServicioNotificaciones();
 		this.servicioVehiculos = new ServicioVehiculos();
@@ -46,6 +52,7 @@ public class Fachada {
 		this.servicioPuestos = new ServicioPuestos();
 		this.servicioBonificaciones = new ServicioBonificaciones();
 		this.servicioTransitos = new ServicioTransitos();
+		this.servicioUsuarios = new ServicioUsuarios();
 	}
 
 	public static Fachada getInstancia() {
@@ -152,6 +159,30 @@ public class Fachada {
 
 	public TipoBonificacion crearTipoBonificacion(String nombre) throws PeajesExceptions {
 		return servicioBonificaciones.crearTipoBonificacion(nombre);
+	}
+
+	public Administrador loginAdministrador(String usuario, String contrasenia) throws PeajesExceptions {
+		return servicioUsuarios.loginAdministrador(usuario, contrasenia);
+	}
+
+	public Propietario loginPropietario(String cedula, String contrasenia) throws PeajesExceptions {
+		return servicioUsuarios.loginPropietario(cedula, contrasenia);
+	}
+
+	public Collection<Sesion> getSesiones() {
+		return servicioUsuarios.getSesiones();
+	}
+
+	public void agregar(Sesion sesion) {
+		this.servicioUsuarios.agregar(sesion);
+	}
+
+	public void remover(Sesion sesion) {
+		this.servicioUsuarios.remover(sesion);
+	}
+
+	public void removerPorHttpSessionId(String httpSessionId) {
+		this.servicioUsuarios.removerPorHttpSessionId(httpSessionId);
 	}
 
 }
