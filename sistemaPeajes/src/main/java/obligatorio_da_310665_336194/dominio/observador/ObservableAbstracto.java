@@ -1,4 +1,4 @@
-package obligatorio_da_310665_336194.dominio;
+package obligatorio_da_310665_336194.dominio.observador;
 
 import java.util.ArrayList;
 import java.util.Collection;

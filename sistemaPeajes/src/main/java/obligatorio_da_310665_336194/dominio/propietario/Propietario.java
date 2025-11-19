@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import obligatorio_da_310665_336194.dominio.Observable;
-import obligatorio_da_310665_336194.dominio.ObservableConcreto;
-import obligatorio_da_310665_336194.dominio.Observador;
-import obligatorio_da_310665_336194.dominio.Usuario;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.observador.Observable;
+import obligatorio_da_310665_336194.dominio.observador.ObservableConcreto;
+import obligatorio_da_310665_336194.dominio.observador.Observador;
 import obligatorio_da_310665_336194.dominio.transito.Transito;
+import obligatorio_da_310665_336194.dominio.usuario.Usuario;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 

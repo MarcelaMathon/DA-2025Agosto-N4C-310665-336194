@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import obligatorio_da_310665_336194.dominio.ObservableAbstracto;
-import obligatorio_da_310665_336194.dominio.Observador;
 import obligatorio_da_310665_336194.utils.ConexionNavegador;
 import obligatorio_da_310665_336194.utils.Respuesta;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.observador.ObservableAbstracto;
+import obligatorio_da_310665_336194.dominio.observador.Observador;
 import obligatorio_da_310665_336194.dominio.propietario.EventoPropietario;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.transito.Transito;

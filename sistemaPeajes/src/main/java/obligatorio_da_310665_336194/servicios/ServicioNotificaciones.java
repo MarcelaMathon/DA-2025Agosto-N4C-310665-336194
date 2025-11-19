@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import obligatorio_da_310665_336194.dominio.ObservableAbstracto;
-import obligatorio_da_310665_336194.dominio.Observador;
 import obligatorio_da_310665_336194.dominio.notificacion.Notificacion;
+import obligatorio_da_310665_336194.dominio.observador.ObservableAbstracto;
+import obligatorio_da_310665_336194.dominio.observador.Observador;
 import obligatorio_da_310665_336194.dominio.propietario.EventoPropietario;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 
