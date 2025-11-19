@@ -13,6 +13,7 @@ import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
 import obligatorio_da_310665_336194.dominio.transito.Transito;
 import obligatorio_da_310665_336194.dominio.usuario.Administrador;
 import obligatorio_da_310665_336194.dominio.usuario.Sesion;
+import obligatorio_da_310665_336194.dominio.usuario.Usuario;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 
@@ -139,6 +140,10 @@ public class Fachada {
 	public void agregar(Propietario propietario) {
 		servicioPropietarios.agregar(propietario);
 		propietario.agregar(servicioNotificaciones);
+	}
+
+	public void agregar(Usuario usuario) {
+		servicioUsuarios.agregar(usuario);
 	}
 
 	public void agregar(Puesto puesto) {

@@ -3,8 +3,14 @@ package obligatorio_da_310665_336194.controladores;
 import obligatorio_da_310665_336194.dominio.usuario.Usuario;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 import obligatorio_da_310665_336194.servicios.fachada.Fachada;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import jakarta.servlet.http.HttpSession;
 
+@RestController
+@RequestMapping("/acceso/admin")
 public class ControladorLoginAdministrador extends ControladorLoginAbstracto {
 
 	private static final String ADMINISTRADOR_STATE_KEY = "ADMINISTRADOR_STATE_KEY";

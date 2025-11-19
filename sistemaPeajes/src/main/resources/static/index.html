@@ -7,11 +7,48 @@
     <link rel="stylesheet" href="styles/index.css" />
   </head>
   <body>
+    <!-- Header de navegación -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <span class="navbar-icon">🛣️</span>
+          <span class="navbar-title">Sistema de Peajes</span>
+        </div>
+        <div class="navbar-menu">
+          <a href="loginAdministrador.html" class="navbar-link">Login Admin</a>
+          <a href="loginPropietario.html" class="navbar-link"
+            >Login Propietario</a
+          >
+          <a href="asignarBonificacion.html" class="navbar-link"
+            >Bonificaciones</a
+          >
+          <a href="emularTransito.html" class="navbar-link">Emular Tránsito</a>
+          <a href="cambiarEstado.html" class="navbar-link">Cambiar Estado</a>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
       <h1>🛣️ Sistema de Peajes</h1>
       <p class="subtitle">Seleccione una opción del menú</p>
 
       <div class="menu">
+        <a href="loginAdministrador.html" class="menu-item">
+          <div class="menu-icon">🔐</div>
+          <div class="menu-title">Login Administrador</div>
+          <div class="menu-description">
+            Acceso para administradores del sistema
+          </div>
+        </a>
+
+        <a href="loginPropietario.html" class="menu-item">
+          <div class="menu-icon">👤</div>
+          <div class="menu-title">Login Propietario</div>
+          <div class="menu-description">
+            Acceso para propietarios de vehículos
+          </div>
+        </a>
+
         <a href="asignarBonificacion.html" class="menu-item">
           <div class="menu-icon">🎁</div>
           <div class="menu-title">Asignar Bonificación</div>
@@ -33,7 +70,7 @@
         </a>
 
         <a href="tableroPropietario.html" class="menu-item">
-          <div class="menu-icon">👤</div>
+          <div class="menu-icon">📊</div>
           <div class="menu-title">Tablero Propietario</div>
           <div class="menu-description">Ver información del propietario</div>
         </a>

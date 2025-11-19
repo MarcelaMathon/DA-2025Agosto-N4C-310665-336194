@@ -1,10 +1,15 @@
 package obligatorio_da_310665_336194.controladores;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import jakarta.servlet.http.HttpSession;
 import obligatorio_da_310665_336194.dominio.usuario.Usuario;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
 import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
+@RestController
+@RequestMapping("/acceso/propietario")
 public class ControladorLoginPropietario extends ControladorLoginAbstracto {
 
     private static final String PROPIETARIO_STATE_KEY = "PROPIETARIO_STATE_KEY";

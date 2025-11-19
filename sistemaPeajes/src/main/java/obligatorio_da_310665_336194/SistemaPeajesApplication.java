@@ -7,9 +7,11 @@ import obligatorio_da_310665_336194.dominio.bonificacion.Bonificacion;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
 import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
+import obligatorio_da_310665_336194.dominio.usuario.Administrador;
 import obligatorio_da_310665_336194.dominio.vehiculo.CategoríaVehiculo;
 import obligatorio_da_310665_336194.dominio.vehiculo.Vehiculo;
 import obligatorio_da_310665_336194.servicios.fachada.Fachada;
+import obligatorio_da_310665_336194.dominio.usuario.Usuario;
 
 @SpringBootApplication
 public class SistemaPeajesApplication {
@@ -27,6 +29,16 @@ public class SistemaPeajesApplication {
 	}
 
 	private static void cargarDatosDePrueba() {
+		// Crear administradores
+		Administrador admin1 = new Administrador("111", "Admin Principal");
+		admin1.setPassword("admin111");
+
+		Administrador admin2 = new Administrador("222", "Admin Secundario");
+		admin2.setPassword("admin222");
+
+		Fachada.getInstancia().agregar((Usuario) admin1);
+		Fachada.getInstancia().agregar((Usuario) admin2);
+
 		// Crear bonificaciones
 		Bonificacion bonifExonerado = new Bonificacion("Exonerado");
 		Bonificacion bonifFrecuente = new Bonificacion("Frecuente");
@@ -62,6 +74,7 @@ public class SistemaPeajesApplication {
 
 		// Crear propietarios con diferentes estados
 		Propietario prop1 = new Propietario("12345678", "Juan Pérez");
+		prop1.setPassword("12345678");
 		Propietario prop2 = new Propietario("23456789", "María González");
 		Propietario prop3 = new Propietario("34567890", "Carlos Rodríguez");
 		Propietario prop4 = new Propietario("45678901", "Ana Martínez");
@@ -71,6 +84,12 @@ public class SistemaPeajesApplication {
 		Fachada.getInstancia().agregar(prop2);
 		Fachada.getInstancia().agregar(prop3);
 		Fachada.getInstancia().agregar(prop4);
+
+		// Registrar propietarios como usuarios para login
+		Fachada.getInstancia().agregar((Usuario) prop1);
+		Fachada.getInstancia().agregar((Usuario) prop2);
+		Fachada.getInstancia().agregar((Usuario) prop3);
+		Fachada.getInstancia().agregar((Usuario) prop4);
 
 		CategoríaVehiculo categoría1 = new CategoríaVehiculo("Camioneta");
 		CategoríaVehiculo categoría2 = new CategoríaVehiculo("Auto");
@@ -88,9 +107,10 @@ public class SistemaPeajesApplication {
 		Fachada.getInstancia().agregar(vehiculo4);
 
 		System.out.println("\n✓ Datos de prueba cargados:");
+		System.out.println("  - 2 administradores (cédulas: 11111111/admin123, 22222222/admin456)");
 		System.out.println("  - 3 bonificaciones (Exonerado, Frecuente, Trabajador)");
 		System.out.println("  - 3 puestos de peaje");
-		System.out.println("  - 4 propietarios habilitados (cédulas: 12345678, 23456789, 34567890, 45678901)");
+		System.out.println("  - 4 propietarios habilitados (cédulas: 12345678/12345678, 23456789, 34567890, 45678901)");
 		System.out.println("  - 4 vehículos\n");
 	}
 }

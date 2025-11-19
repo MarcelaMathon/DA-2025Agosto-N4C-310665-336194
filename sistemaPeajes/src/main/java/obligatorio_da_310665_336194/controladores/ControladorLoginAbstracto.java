@@ -2,6 +2,8 @@ package obligatorio_da_310665_336194.controladores;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.PostMapping;
+
 import obligatorio_da_310665_336194.dominio.usuario.Sesion;
 import obligatorio_da_310665_336194.dominio.usuario.Usuario;
 import obligatorio_da_310665_336194.excepciones.PeajesExceptions;
@@ -13,6 +15,7 @@ public abstract class ControladorLoginAbstracto {
 
     protected Fachada fachada = Fachada.getInstancia();
 
+    @PostMapping("login")
     public List<Respuesta> login(HttpSession sesion, String cedula, String password) throws PeajesExceptions {
         Usuario usuario = getUsuario(cedula, password);
         if (usuario != null) {

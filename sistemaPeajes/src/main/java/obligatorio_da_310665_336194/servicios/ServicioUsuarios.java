@@ -20,15 +20,23 @@ public class ServicioUsuarios {
     }
 
     public Administrador loginAdministrador(String cedula, String password) throws PeajesExceptions {
-        // Verificar si ya hay un administrador logueado
+        Usuario usuario = login(cedula, password);
+
+        // Verificar si ESTE administrador específico ya está logueado
+        if (usuario instanceof Administrador && existeAdministradorLogueado((Administrador) usuario)) {
+            throw new PeajesExceptions("Ud. Ya está logueado");
+        }
+
+        return usuario instanceof Administrador ? (Administrador) usuario : null;
+    }
+
+    private boolean existeAdministradorLogueado(Administrador admin) {
         for (Sesion sesion : sesiones) {
-            if (sesion.esAdministrador()) {
-                throw new PeajesExceptions("Ud. Ya está logueado");
+            if (sesion.esAdministrador() && sesion.getUsuario().getCedula().equals(admin.getCedula())) {
+                return true;
             }
         }
-        
-        Usuario usuario = login(cedula, password);
-        return usuario instanceof Administrador ? (Administrador) usuario : null;
+        return false;
     }
 
     private Usuario login(String cedula, String password) throws PeajesExceptions {
@@ -40,7 +48,7 @@ public class ServicioUsuarios {
     }
 
     public void agregar(Usuario usuario) {
-        usuarios.put(usuario.getNombre(), usuario);
+        usuarios.put(usuario.getCedula(), usuario);
     }
 
     public Collection<Sesion> getSesiones() {
