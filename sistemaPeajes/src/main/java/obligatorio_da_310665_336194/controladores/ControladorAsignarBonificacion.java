@@ -54,7 +54,6 @@ public class ControladorAsignarBonificacion {
 			PropietarioDTO dto = new PropietarioDTO(propietario);
 			respuestas.add(new Respuesta("propietario", dto));
 
-			// Obtener bonificaciones asignadas
 			List<BonificacionAsignadaDTO> bonificacionesDTO = new ArrayList<>();
 			for (AsignacionDeBonificacion asignacion : fachada.obtenerBonificacionesPropietario(propietario)) {
 				bonificacionesDTO.add(new BonificacionAsignadaDTO(asignacion));
@@ -74,7 +73,6 @@ public class ControladorAsignarBonificacion {
 		sesion.setAttribute(PROPIETARIO_KEY, propietario); // Guardar en sesión
 		PropietarioDTO dto = new PropietarioDTO(propietario);
 
-		// Obtener bonificaciones asignadas
 		List<BonificacionAsignadaDTO> bonificacionesDTO = new ArrayList<>();
 		for (AsignacionDeBonificacion asignacion : fachada.obtenerBonificacionesPropietario(propietario)) {
 			bonificacionesDTO.add(new BonificacionAsignadaDTO(asignacion));

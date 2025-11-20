@@ -12,11 +12,6 @@ public abstract class TipoBonificacion {
 			new Frecuente(),
 			new Trabajador());
 
-	public abstract String getTipoBonificacion();
-
-	public abstract Double obtenerDescuento(AsignacionDeBonificacion asignacion, Vehiculo vehiculo,
-			Date fechaHoraTransito);
-
 	public static List<String> obtenerNombresDisponibles() {
 		List<String> nombres = new ArrayList<>();
 		for (TipoBonificacion tipo : tiposDisponibles) {
@@ -31,7 +26,6 @@ public abstract class TipoBonificacion {
 		}
 		for (TipoBonificacion tipo : tiposDisponibles) {
 			if (tipo.getTipoBonificacion().equals(nombre)) {
-				// Crear una nueva instancia del mismo tipo
 				return crearNuevaInstancia(tipo);
 			}
 		}
@@ -48,5 +42,10 @@ public abstract class TipoBonificacion {
 		}
 		return null;
 	}
+
+	public abstract String getTipoBonificacion();
+
+	public abstract Double obtenerDescuento(AsignacionDeBonificacion asignacion, Vehiculo vehiculo,
+			Date fechaHoraTransito);
 
 }

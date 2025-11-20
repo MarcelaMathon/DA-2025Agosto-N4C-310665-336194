@@ -31,7 +31,6 @@ public class ServicioTransitos {
 		propietario.validarPuedeTransitar();
 
 		Transito transito = new Transito(puesto, vehiculo, fechaHora);
-		// Asignar el propietario al tránsito
 		transito.setPropietario(propietario);
 
 		AsignacionDeBonificacion bonificacion = null;
@@ -58,7 +57,7 @@ public class ServicioTransitos {
 		vehiculo.getTransitos().add(transito);
 
 		if (!propietario.esPenalizado()) {
-			propietario.notificarTransito(transito); // Pasar el objeto transito completo
+			propietario.notificarTransito(transito);
 			propietario.tieneSaldoBajo();
 		}
 
@@ -68,12 +67,10 @@ public class ServicioTransitos {
 	public List<Transito> getTransitosPropietario(Propietario propietario) {
 		List<Transito> transitosPropietario = new ArrayList<>();
 		for (Transito transito : transitos) {
-			// Verificar que el propietario del tránsito no sea null antes de comparar
 			if (transito.getPropietario() != null && transito.getPropietario().equals(propietario)) {
 				transitosPropietario.add(transito);
 			}
 		}
-		// Ordenar por fecha/hora descendente (más reciente primero)
 		transitosPropietario.sort(Comparator.comparing(Transito::getFechaHora).reversed());
 		return transitosPropietario;
 	}

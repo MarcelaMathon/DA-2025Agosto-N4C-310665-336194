@@ -22,7 +22,6 @@ public class ServicioNotificaciones implements Observador {
 				notificacionesPropietario.add(notificacion);
 			}
 		}
-		// Ordenar por fecha/hora descendente (más reciente primero)
 		notificacionesPropietario.sort(Comparator.comparing(Notificacion::getFechaHora).reversed());
 		return notificacionesPropietario;
 	}
@@ -80,7 +79,6 @@ public class ServicioNotificaciones implements Observador {
 				propietario.recibeNotificaciones() &&
 				!propietario.esPenalizado()) {
 
-			// Obtener información del tránsito desde el evento
 			if (eventoPropietario.getTransito() != null) {
 				var transito = eventoPropietario.getTransito();
 				String mensaje = "[" + transito.getFechaHora() + "] Pasaste por el puesto " +

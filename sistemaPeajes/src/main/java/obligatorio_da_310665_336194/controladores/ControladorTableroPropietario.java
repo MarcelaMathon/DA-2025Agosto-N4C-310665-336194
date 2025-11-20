@@ -78,14 +78,12 @@ public class ControladorTableroPropietario implements Observador {
 			bonificacionesDTO.add(BonificacionTableroDTO.desde(b));
 		}
 
-		// Convertir tránsitos a DTOs
 		List<Transito> transitosOrig = fachada.getTransitosPropietario(propietarioActual);
 		List<TransitoTableroDTO> transitosDTO = new ArrayList<>();
 		for (Transito t : transitosOrig) {
 			transitosDTO.add(TransitoTableroDTO.desde(t));
 		}
 
-		// Convertir vehículos a DTOs
 		List<Vehiculo> vehiculosOrig = fachada.getVehiculosPropietario(propietarioActual);
 		List<VehiculoTableroDTO> vehiculosDTO = new ArrayList<>();
 		for (Vehiculo v : vehiculosOrig) {
@@ -124,32 +122,30 @@ public class ControladorTableroPropietario implements Observador {
 		if (!(evento instanceof EventoPropietario)) {
 			return;
 		}
-
 		EventoPropietario eventoPropietario = (EventoPropietario) evento;
 		Propietario propietario = eventoPropietario.getPropietario();
 
 		if (!propietario.equals(propietarioActual)) {
 			return;
 		}
-
 		Propietario.EventosPropietario tipoEvento = eventoPropietario.getTipo();
 
+		actualizarTableroPorEvento(tipoEvento);
+	}
+
+	private void actualizarTableroPorEvento(Propietario.EventosPropietario tipoEvento) {
 		switch (tipoEvento) {
 			case TRANSITO_REALIZADO:
-				// Enviar tránsitos, vehículos, propietario y notificaciones juntos
 				conexionNavegador
 						.enviarJSON(Respuesta.lista(transitos(), vehiculos(), propietario(), notificaciones()));
 				break;
 			case SALDO_BAJO:
-				// Enviar propietario y notificaciones juntos
 				conexionNavegador.enviarJSON(Respuesta.lista(propietario(), notificaciones()));
 				break;
 			case ESTADO_CAMBIADO:
-				// Enviar propietario y notificaciones juntos
 				conexionNavegador.enviarJSON(Respuesta.lista(propietario(), notificaciones()));
 				break;
 			case BONIFICACION_ASIGNADA:
-				// Enviar bonificaciones y notificaciones juntos
 				conexionNavegador.enviarJSON(Respuesta.lista(bonificaciones(), notificaciones()));
 				break;
 		}

@@ -63,13 +63,10 @@ public class ServicioBonificaciones {
 		}
 
 		AsignacionDeBonificacion nuevaAsignacion = new AsignacionDeBonificacion(propietario, puesto, tipoBonificacion);
-
-		// Agregar bonificación a las listas
 		propietario.getAsignacionesDeBonificacion().add(nuevaAsignacion);
 		puesto.getAsignacionesDeBonificacion().add(nuevaAsignacion);
 		asignacionDeBonificaciones.add(nuevaAsignacion);
 
-		// Notificar después de agregar
 		propietario.notificarBonificacion();
 
 		return nuevaAsignacion;
