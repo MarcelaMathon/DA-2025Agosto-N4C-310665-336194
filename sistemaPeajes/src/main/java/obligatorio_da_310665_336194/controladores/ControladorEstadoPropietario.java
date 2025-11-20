@@ -71,7 +71,7 @@ public class ControladorEstadoPropietario {
 				new Respuesta("propietario", dto));
 	}
 
-	public List<Respuesta> estados() {
+	private List<Respuesta> estados() {
 		List<String> nombresEstados = new ArrayList<>();
 		for (EstadoPropietario estado : estados) {
 			nombresEstados.add(estado.getNombreEstado());

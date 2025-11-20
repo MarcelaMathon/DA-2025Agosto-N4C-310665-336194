@@ -24,6 +24,14 @@ public class ServicioPuestos {
 		return puestos;
 	}
 
+	public List<String> getNombresPuestos() {
+		List<String> nombresPuestos = new ArrayList<>();
+		for (Puesto puesto : puestos) {
+			nombresPuestos.add(puesto.getNombre());
+		}
+		return nombresPuestos;
+	}
+
 	public List<Tarifa> tarifasDePuesto(Puesto puesto) {
 		for (Puesto p : puestos) {
 			if (p.equals(puesto)) {

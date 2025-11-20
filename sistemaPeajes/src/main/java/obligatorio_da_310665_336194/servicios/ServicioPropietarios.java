@@ -39,6 +39,14 @@ public class ServicioPropietarios {
 		return EstadoPropietario.getEstadosDisponibles();
 	}
 
+	public List<String> getNombresEstados() {
+		List<String> nombresEstados = new ArrayList<>();
+		for (EstadoPropietario estado : getEstados()) {
+			nombresEstados.add(estado.getNombreEstado());
+		}
+		return nombresEstados;
+	}
+
 	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) throws PeajesExceptions {
 		Propietario propietario = buscarPropietarioPorCedula(cedula);
 		if (propietario != null) {

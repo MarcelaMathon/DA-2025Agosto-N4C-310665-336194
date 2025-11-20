@@ -146,8 +146,9 @@ public class Propietario extends Usuario implements Observable {
 		observableConcreto.remover(observador);
 	}
 
-	public void notificarTransito(String mensaje) {
-		observableConcreto.notificarObservadores(new EventoPropietario(this, EventosPropietario.TRANSITO_REALIZADO));
+	public void notificarTransito(Transito transito) {
+		observableConcreto
+				.notificarObservadores(new EventoPropietario(this, EventosPropietario.TRANSITO_REALIZADO, transito));
 	}
 
 	public void notificarBonificacion() {

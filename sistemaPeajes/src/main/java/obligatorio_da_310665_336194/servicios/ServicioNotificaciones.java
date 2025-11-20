@@ -50,7 +50,7 @@ public class ServicioNotificaciones implements Observador {
 				break;
 			case TRANSITO_REALIZADO:
 				if (!propietario.esPenalizado()) {
-					procesarNotificacionTransito(propietario);
+					procesarNotificacionTransito(propietario, eventoPropietario);
 				}
 				break;
 			case BONIFICACION_ASIGNADA:
@@ -75,20 +75,19 @@ public class ServicioNotificaciones implements Observador {
 		}
 	}
 
-	// TODO: arreglar mensaje para que devuelva puesto y matricula
-
-	private void procesarNotificacionTransito(Propietario propietario) {
+	private void procesarNotificacionTransito(Propietario propietario, EventoPropietario eventoPropietario) {
 		if (propietario.recibeNotificaciones() != null &&
 				propietario.recibeNotificaciones() &&
 				!propietario.esPenalizado()) {
 
-			String mensaje = "[" + new Date() + "] Has realizado un tránsito exitosamente. Saldo restante: $" +
-					propietario.getSaldoActual();
-			/*
-			 * [Fecha y hora de la notificación] + “Pasaste por el puesto “ + número de
-			 * puesto + “con el vehículo” + número de matrícula.
-			 */
-			enviarNotificacion(propietario, mensaje);
+			// Obtener información del tránsito desde el evento
+			if (eventoPropietario.getTransito() != null) {
+				var transito = eventoPropietario.getTransito();
+				String mensaje = "[" + transito.getFechaHora() + "] Pasaste por el puesto " +
+						transito.getPuesto().getNombre() + " con el vehículo " +
+						transito.getVehiculo().getMatricula();
+				enviarNotificacion(propietario, mensaje);
+			}
 		}
 	}
 

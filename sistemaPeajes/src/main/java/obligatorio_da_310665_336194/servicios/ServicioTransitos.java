@@ -58,7 +58,7 @@ public class ServicioTransitos {
 		vehiculo.getTransitos().add(transito);
 
 		if (!propietario.esPenalizado()) {
-			propietario.notificarTransito("Tránsito realizado");
+			propietario.notificarTransito(transito); // Pasar el objeto transito completo
 			propietario.tieneSaldoBajo();
 		}
 

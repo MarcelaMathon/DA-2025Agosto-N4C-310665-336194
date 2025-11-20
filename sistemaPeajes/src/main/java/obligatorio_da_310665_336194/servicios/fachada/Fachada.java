@@ -67,6 +67,10 @@ public class Fachada {
 		return servicioPuestos.listarPuestos();
 	}
 
+	public List<String> getNombresPuestos() {
+		return servicioPuestos.getNombresPuestos();
+	}
+
 	public List<Tarifa> tarifasDePuesto(Puesto puesto) {
 		return servicioPuestos.tarifasDePuesto(puesto);
 	}
@@ -131,6 +135,10 @@ public class Fachada {
 
 	public List<EstadoPropietario> getEstados() {
 		return servicioPropietarios.getEstados();
+	}
+
+	public List<String> getNombresEstados() {
+		return servicioPropietarios.getNombresEstados();
 	}
 
 	public Propietario cambiarEstado(String cedula, EstadoPropietario nuevoEstado) throws PeajesExceptions {
