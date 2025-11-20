@@ -136,8 +136,9 @@ public class ControladorTableroPropietario implements Observador {
 
 		switch (tipoEvento) {
 			case TRANSITO_REALIZADO:
-				// Enviar tránsitos, propietario y notificaciones juntos
-				conexionNavegador.enviarJSON(Respuesta.lista(transitos(), propietario(), notificaciones()));
+				// Enviar tránsitos, vehículos, propietario y notificaciones juntos
+				conexionNavegador
+						.enviarJSON(Respuesta.lista(transitos(), vehiculos(), propietario(), notificaciones()));
 				break;
 			case SALDO_BAJO:
 				// Enviar propietario y notificaciones juntos
@@ -186,6 +187,15 @@ public class ControladorTableroPropietario implements Observador {
 			bonificacionesDTO.add(BonificacionTableroDTO.desde(b));
 		}
 		return new Respuesta("bonificaciones", bonificacionesDTO);
+	}
+
+	private Respuesta vehiculos() {
+		List<Vehiculo> vehiculosOrig = fachada.getVehiculosPropietario(propietarioActual);
+		List<VehiculoTableroDTO> vehiculosDTO = new ArrayList<>();
+		for (Vehiculo v : vehiculosOrig) {
+			vehiculosDTO.add(VehiculoTableroDTO.desde(v));
+		}
+		return new Respuesta("vehiculos", vehiculosDTO);
 	}
 
 }

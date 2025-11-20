@@ -88,6 +88,14 @@ public class Propietario extends Usuario implements Observable {
 		this.saldoActual -= monto;
 	}
 
+	public void setSaldoActual(Double saldo) {
+		this.saldoActual = saldo;
+	}
+
+	public void setSaldoMinimoAlerta(Double saldoMinimo) {
+		this.saldoMinimoAlerta = saldoMinimo;
+	}
+
 	public boolean tieneSaldoBajo() {
 		boolean saldoBajo = this.saldoActual < this.saldoMinimoAlerta;
 		if (saldoBajo) {
