@@ -103,11 +103,5 @@ public class SistemaPeajesApplication {
 		Fachada.getInstancia().agregar(vehiculo3);
 		Fachada.getInstancia().agregar(vehiculo4);
 
-		System.out.println("\n✓ Datos de prueba cargados:");
-		System.out.println("  - 2 administradores (cédulas: 11111111/admin123, 22222222/admin456)");
-		System.out.println("  - 3 bonificaciones (Exonerado, Frecuente, Trabajador)");
-		System.out.println("  - 3 puestos de peaje");
-		System.out.println("  - 4 propietarios habilitados (cédulas: 12345678/12345678, 23456789, 34567890, 45678901)");
-		System.out.println("  - 4 vehículos\n");
 	}
 }

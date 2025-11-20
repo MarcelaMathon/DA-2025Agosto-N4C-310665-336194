@@ -8,6 +8,7 @@ import obligatorio_da_310665_336194.utils.Respuesta;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Scope;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,25 +31,47 @@ import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 @Scope("session")
 public class ControladorAsignarBonificacion {
 
+	private static final String PROPIETARIO_KEY = "asignarBonificacion_propietario";
+
 	Fachada fachada = Fachada.getInstancia();
 	private List<Puesto> puestos;
 
 	@GetMapping("/vistaConectada")
 	public List<Respuesta> inicializarVista(
-			@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin) {
+			@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin,
+			HttpSession sesion) {
 		if (admin == null) {
 			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
 		}
 		// Cargar datos iniciales
-		return Respuesta.lista(bonificaciones(), puestos());
+		List<Respuesta> respuestas = new ArrayList<>();
+		respuestas.add(bonificaciones());
+		respuestas.add(puestos());
+
+		// Si hay un propietario en sesión, devolverlo
+		Propietario propietario = (Propietario) sesion.getAttribute(PROPIETARIO_KEY);
+		if (propietario != null) {
+			PropietarioDTO dto = new PropietarioDTO(propietario);
+			respuestas.add(new Respuesta("propietario", dto));
+
+			// Obtener bonificaciones asignadas
+			List<BonificacionAsignadaDTO> bonificacionesDTO = new ArrayList<>();
+			for (AsignacionDeBonificacion asignacion : fachada.obtenerBonificacionesPropietario(propietario)) {
+				bonificacionesDTO.add(new BonificacionAsignadaDTO(asignacion));
+			}
+			respuestas.add(new Respuesta("bonificacionesAsignadas", bonificacionesDTO));
+		}
+
+		return respuestas;
 	}
 
 	@PostMapping("/buscarPropietario")
-	public List<Respuesta> buscarPropietario(@RequestParam String cedula) throws PeajesExceptions {
+	public List<Respuesta> buscarPropietario(@RequestParam String cedula, HttpSession sesion) throws PeajesExceptions {
 		if (cedula.isBlank())
 			throw new PeajesExceptions("Debe ingresar una cédula");
 
 		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
+		sesion.setAttribute(PROPIETARIO_KEY, propietario); // Guardar en sesión
 		PropietarioDTO dto = new PropietarioDTO(propietario);
 
 		// Obtener bonificaciones asignadas
