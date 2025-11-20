@@ -1,6 +1,7 @@
 package obligatorio_da_310665_336194.servicios;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class ServicioNotificaciones implements Observador {
 				notificacionesPropietario.add(notificacion);
 			}
 		}
+		// Ordenar por fecha/hora descendente (más reciente primero)
+		notificacionesPropietario.sort(Comparator.comparing(Notificacion::getFechaHora).reversed());
 		return notificacionesPropietario;
 	}
 
@@ -50,6 +53,9 @@ public class ServicioNotificaciones implements Observador {
 					procesarNotificacionTransito(propietario);
 				}
 				break;
+			case BONIFICACION_ASIGNADA:
+				// No se envía notificación al asignar bonificación
+				break;
 		}
 	}
 
@@ -62,7 +68,7 @@ public class ServicioNotificaciones implements Observador {
 	}
 
 	private void procesarNotificacionCambioEstado(Propietario propietario) {
-		if (propietario.recibeNotificaciones() != null && propietario.recibeNotificaciones()) {
+		if (propietario != null) {
 			String mensaje = "[" + new Date() + "] Se ha cambiado tu estado en el sistema. Tu estado actual es " +
 					propietario.getNombreEstado();
 			enviarNotificacion(propietario, mensaje);

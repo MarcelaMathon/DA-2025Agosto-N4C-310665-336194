@@ -74,7 +74,7 @@ public class Propietario extends Usuario implements Observable {
 
 	public EstadoPropietario cambiarEstado(EstadoPropietario nuevoEstado) throws PeajesExceptions {
 		if (nuevoEstado.equals(this.estadoActual)) {
-			throw new PeajesExceptions("El nuevo estado debe ser diferente al actual");
+			throw new PeajesExceptions("El propietario ya esta en estado " + this.getNombreEstado());
 		}
 		this.estadoActual = nuevoEstado;
 

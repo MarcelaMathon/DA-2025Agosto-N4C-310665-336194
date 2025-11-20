@@ -34,7 +34,8 @@ public class ControladorAsignarBonificacion {
 	private List<Puesto> puestos;
 
 	@GetMapping("/vistaConectada")
-	public List<Respuesta> inicializarVista(@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin) {
+	public List<Respuesta> inicializarVista(
+			@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin) {
 		if (admin == null) {
 			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
 		}

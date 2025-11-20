@@ -14,6 +14,7 @@ import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Comparator;
 
 public class ServicioTransitos {
 
@@ -72,6 +73,8 @@ public class ServicioTransitos {
 				transitosPropietario.add(transito);
 			}
 		}
+		// Ordenar por fecha/hora descendente (más reciente primero)
+		transitosPropietario.sort(Comparator.comparing(Transito::getFechaHora).reversed());
 		return transitosPropietario;
 	}
 

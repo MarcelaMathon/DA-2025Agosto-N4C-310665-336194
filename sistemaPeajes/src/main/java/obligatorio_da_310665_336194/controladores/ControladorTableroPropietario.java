@@ -54,12 +54,14 @@ public class ControladorTableroPropietario implements Observador {
 	}
 
 	@GetMapping("/inicializar")
-	public List<Respuesta> inicializarTablero(@SessionAttribute(name = "PROPIETARIO_STATE_KEY", required = false) Propietario propietario) throws PeajesExceptions {
+	public List<Respuesta> inicializarTablero(
+			@SessionAttribute(name = "PROPIETARIO_STATE_KEY", required = false) Propietario propietario)
+			throws PeajesExceptions {
 		// Verificar si hay un propietario en la sesión
 		if (propietario == null) {
 			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
 		}
-		
+
 		propietarioActual = propietario;
 
 		// Registrar este controlador como observador del propietario
@@ -105,8 +107,9 @@ public class ControladorTableroPropietario implements Observador {
 	}
 
 	@PostMapping("/borrarNotificaciones")
-	public List<Respuesta> borrarNotificaciones(@SessionAttribute(name = "PROPIETARIO_STATE_KEY", required = false) Propietario propietario) throws PeajesExceptions {
-		// Verificar si hay un propietario en la sesión
+	public List<Respuesta> borrarNotificaciones(
+			@SessionAttribute(name = "PROPIETARIO_STATE_KEY", required = false) Propietario propietario)
+			throws PeajesExceptions {
 		if (propietario == null) {
 			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
 		}
@@ -125,14 +128,12 @@ public class ControladorTableroPropietario implements Observador {
 		EventoPropietario eventoPropietario = (EventoPropietario) evento;
 		Propietario propietario = eventoPropietario.getPropietario();
 
-		// Solo procesar si el evento es del propietario que está viendo este tablero
 		if (!propietario.equals(propietarioActual)) {
 			return;
 		}
 
 		Propietario.EventosPropietario tipoEvento = eventoPropietario.getTipo();
 
-		// Actualizar datos según el tipo de evento
 		switch (tipoEvento) {
 			case TRANSITO_REALIZADO:
 				// Enviar tránsitos, propietario y notificaciones juntos
