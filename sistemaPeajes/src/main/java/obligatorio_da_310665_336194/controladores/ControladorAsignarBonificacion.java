@@ -7,9 +7,9 @@ import obligatorio_da_310665_336194.utils.Respuesta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Scope;
+import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,10 +44,10 @@ public class ControladorAsignarBonificacion {
 		PropietarioDTO dto = new PropietarioDTO(propietario);
 
 		// Obtener bonificaciones asignadas
-		List<BonificacionAsignadaDTO> bonificacionesDTO = fachada.obtenerBonificacionesPropietario(propietario)
-				.stream()
-				.map(BonificacionAsignadaDTO::new)
-				.collect(Collectors.toList());
+		List<BonificacionAsignadaDTO> bonificacionesDTO = new ArrayList<>();
+		for (AsignacionDeBonificacion asignacion : fachada.obtenerBonificacionesPropietario(propietario)) {
+			bonificacionesDTO.add(new BonificacionAsignadaDTO(asignacion));
+		}
 
 		return Respuesta.lista(
 				new Respuesta("propietario", dto),
@@ -71,10 +71,10 @@ public class ControladorAsignarBonificacion {
 
 		fachada.asignarBonificacion(propietario, puesto, tipoBonificacion);
 
-		List<BonificacionAsignadaDTO> bonificacionesDTO = fachada.obtenerBonificacionesPropietario(propietario)
-				.stream()
-				.map(BonificacionAsignadaDTO::new)
-				.collect(Collectors.toList());
+		List<BonificacionAsignadaDTO> bonificacionesDTO = new ArrayList<>();
+		for (AsignacionDeBonificacion asignacion : fachada.obtenerBonificacionesPropietario(propietario)) {
+			bonificacionesDTO.add(new BonificacionAsignadaDTO(asignacion));
+		}
 
 		return Respuesta.lista(
 				new Respuesta("mensaje", "Bonificación asignada correctamente"),
@@ -88,9 +88,10 @@ public class ControladorAsignarBonificacion {
 
 	private Respuesta puestos() {
 		puestos = new ArrayList<>(fachada.listarPuestos());
-		List<PuestoDTO> puestosDTO = puestos.stream()
-				.map(PuestoDTO::new)
-				.collect(Collectors.toList());
+		List<PuestoDTO> puestosDTO = new ArrayList<>();
+		for (Puesto puesto : puestos) {
+			puestosDTO.add(new PuestoDTO(puesto));
+		}
 		return new Respuesta("puestos", puestosDTO);
 	}
 

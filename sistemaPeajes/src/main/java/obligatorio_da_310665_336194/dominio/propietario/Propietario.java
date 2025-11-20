@@ -21,10 +21,6 @@ public class Propietario extends Usuario implements Observable {
 	@Getter
 	private Double saldoMinimoAlerta;
 	@Getter
-	private String cedula;
-	@Getter
-	private String nombre;
-	@Getter
 	private EstadoPropietario estadoActual;
 	@Getter
 	private List<AsignacionDeBonificacion> asignacionesDeBonificacion;
@@ -38,8 +34,7 @@ public class Propietario extends Usuario implements Observable {
 	private ObservableConcreto observableConcreto;
 
 	public Propietario(String cedula, String nombre) {
-		this.cedula = cedula;
-		this.nombre = nombre;
+		super(cedula, nombre);
 		this.saldoActual = 1000.0;
 		this.saldoMinimoAlerta = 100.0;
 		this.estadoActual = EstadoPropietario.habilitado();

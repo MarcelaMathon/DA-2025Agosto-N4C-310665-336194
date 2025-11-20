@@ -5,8 +5,8 @@ import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dtos.PropietarioDTO;
 import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,8 +49,10 @@ public class ControladorEstadoPropietario {
 	}
 
 	public List<Respuesta> estados() {
-		return Respuesta.lista(new Respuesta("estados", estados.stream()
-				.map(estado -> estado.getNombreEstado())
-				.collect(Collectors.toList())));
+		List<String> nombresEstados = new ArrayList<>();
+		for (EstadoPropietario estado : estados) {
+			nombresEstados.add(estado.getNombreEstado());
+		}
+		return Respuesta.lista(new Respuesta("estados", nombresEstados));
 	}
 }

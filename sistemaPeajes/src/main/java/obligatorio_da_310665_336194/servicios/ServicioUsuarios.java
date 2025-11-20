@@ -16,18 +16,35 @@ public class ServicioUsuarios {
 
     public Propietario loginPropietario(String cedula, String password) throws PeajesExceptions {
         Usuario usuario = login(cedula, password);
-        return usuario instanceof Propietario ? (Propietario) usuario : null;
+
+        if (!(usuario instanceof Propietario)) {
+            throw new PeajesExceptions("El usuario no es un propietario.");
+        }
+
+        Propietario propietario = (Propietario) usuario;
+        
+        if (!propietario.puedeIngresar()) {
+            throw new PeajesExceptions("Usuario deshabilitado, no puede ingresar al sistema.");
+        }
+    
+        return propietario;
     }
 
     public Administrador loginAdministrador(String cedula, String password) throws PeajesExceptions {
         Usuario usuario = login(cedula, password);
 
+        if (!(usuario instanceof Administrador)) {
+            throw new PeajesExceptions("El usuario no es un administrador.");
+        }
+
+        Administrador administrador = (Administrador) usuario;
+
         // Verificar si ESTE administrador específico ya está logueado
-        if (usuario instanceof Administrador && existeAdministradorLogueado((Administrador) usuario)) {
+        if (existeAdministradorLogueado(administrador)) {
             throw new PeajesExceptions("Ud. Ya está logueado");
         }
 
-        return usuario instanceof Administrador ? (Administrador) usuario : null;
+        return administrador;
     }
 
     private boolean existeAdministradorLogueado(Administrador admin) {
@@ -44,7 +61,7 @@ public class ServicioUsuarios {
         if (usuario != null && usuario.validarAcceso(password)) {
             return usuario;
         }
-        throw new PeajesExceptions("Usuario o password incorrecto");
+        throw new PeajesExceptions("Acceso denegado.");
     }
 
     public void agregar(Usuario usuario) {

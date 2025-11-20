@@ -15,6 +15,14 @@ public abstract class Usuario {
 	@Getter(AccessLevel.NONE)
 	private String password;
 
+	public Usuario() {
+	}
+
+	public Usuario(String cedula, String nombre) {
+		this.cedula = cedula;
+		this.nombre = nombre;
+	}
+
 	public boolean validarAcceso(String password) {
 		return this.password.equals(password);
 	}

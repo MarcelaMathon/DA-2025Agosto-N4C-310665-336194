@@ -2,6 +2,7 @@ package obligatorio_da_310665_336194.controladores;
 
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
 import obligatorio_da_310665_336194.dominio.puesto.Puesto;
+import obligatorio_da_310665_336194.dominio.puesto.Tarifa;
 import obligatorio_da_310665_336194.dominio.transito.Transito;
 import obligatorio_da_310665_336194.dtos.PuestoDTO;
 import obligatorio_da_310665_336194.dtos.TarifaDTO;
@@ -11,7 +12,6 @@ import obligatorio_da_310665_336194.servicios.fachada.Fachada;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,19 +39,20 @@ public class ControladorEmularTransito {
 
 	public List<Respuesta> listarPuestos() {
 		puestos = new ArrayList<>(fachada.listarPuestos());
-		List<PuestoDTO> puestosDTO = puestos.stream()
-				.map(PuestoDTO::new)
-				.collect(Collectors.toList());
+		List<PuestoDTO> puestosDTO = new ArrayList<>();
+		for (Puesto puesto : puestos) {
+			puestosDTO.add(new PuestoDTO(puesto));
+		}
 		return Respuesta.lista(new Respuesta("puestos", puestosDTO));
 	}
 
 	@GetMapping("/tarifasDePuesto")
 	public List<Respuesta> tarifasDePuesto(@RequestParam int posPuesto) {
 		Puesto puesto = puestos.get(posPuesto);
-		List<TarifaDTO> tarifasDTO = fachada.tarifasDePuesto(puesto)
-				.stream()
-				.map(TarifaDTO::new)
-				.collect(Collectors.toList());
+		List<TarifaDTO> tarifasDTO = new ArrayList<>();
+		for (Tarifa tarifa : fachada.tarifasDePuesto(puesto)) {
+			tarifasDTO.add(new TarifaDTO(tarifa));
+		}
 		return Respuesta.lista(new Respuesta("tarifas", tarifasDTO));
 	}
 
