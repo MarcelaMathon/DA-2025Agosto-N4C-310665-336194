@@ -21,56 +21,82 @@ public class ServicioTransitos {
 	private Collection<Transito> transitos = new ArrayList<>();
 
 	public Transito emularTransito(Puesto puesto, String matricula, Date fechaHora) throws PeajesExceptions {
+		Vehiculo vehiculo = validarYObtenerVehiculo(matricula);
+		Propietario propietario = validarYObtenerPropietario(matricula);
 
-		Fachada fachada = Fachada.getInstancia();
+		Transito transito = crearTransito(puesto, vehiculo, propietario, fechaHora);
 
-		Vehiculo vehiculo = fachada.getVehiculo(matricula);
-		Vehiculo.validarExistencia(vehiculo);
+		AsignacionDeBonificacion bonificacion = obtenerBonificacionSiAplica(puesto, propietario);
+		Tarifa tarifaAplicable = buscarTarifaParaVehiculo(puesto, vehiculo);
 
-		Propietario propietario = fachada.getPropietario(matricula);
-		propietario.validarPuedeTransitar();
-
-		Transito transito = new Transito(puesto, vehiculo, fechaHora);
-		transito.setPropietario(propietario);
-
-		AsignacionDeBonificacion bonificacion = null;
-		if (!propietario.esPenalizado()) {
-			bonificacion = fachada.obtenerBonificacion(puesto, propietario);
-		}
-
-		List<Tarifa> tarifas = fachada.tarifasDePuesto(puesto);
-
-		Tarifa tarifaAplicable = null;
-		for (Tarifa tarifa : tarifas) {
-			if (tarifa.getCategoríaVehiculo().getNombre().equals(vehiculo.getCategoria().getNombre())) {
-				tarifaAplicable = tarifa;
-				break;
-			}
-		}
-
-		transito.calcularCosto(tarifaAplicable, bonificacion);
-
-		propietario.validarSaldoSuficiente(transito.getCosto());
-		propietario.descontarSaldo(transito.getCosto());
-
-		transitos.add(transito);
-		vehiculo.getTransitos().add(transito);
-
-		if (!propietario.esPenalizado()) {
-			propietario.notificarTransito(transito);
-			propietario.tieneSaldoBajo();
-		}
+		procesarCostoYPago(transito, tarifaAplicable, bonificacion, propietario);
+		registrarTransito(transito, vehiculo, propietario);
+		notificarSiCorresponde(propietario, transito);
 
 		return transito;
 	}
 
-	public List<Transito> getTransitosPropietario(Propietario propietario) {
-		List<Transito> transitosPropietario = new ArrayList<>();
-		for (Transito transito : transitos) {
-			if (transito.getPropietario() != null && transito.getPropietario().equals(propietario)) {
-				transitosPropietario.add(transito);
+	private Vehiculo validarYObtenerVehiculo(String matricula) throws PeajesExceptions {
+		Fachada fachada = Fachada.getInstancia();
+		Vehiculo vehiculo = fachada.getVehiculo(matricula);
+		Vehiculo.validarExistencia(vehiculo);
+		return vehiculo;
+	}
+
+	private Propietario validarYObtenerPropietario(String matricula) throws PeajesExceptions {
+		Fachada fachada = Fachada.getInstancia();
+		Propietario propietario = fachada.getPropietario(matricula);
+		propietario.validarPuedeTransitar();
+		return propietario;
+	}
+
+	private Transito crearTransito(Puesto puesto, Vehiculo vehiculo, Propietario propietario, Date fechaHora) {
+		Transito transito = new Transito(puesto, vehiculo, fechaHora);
+		transito.setPropietario(propietario);
+		return transito;
+	}
+
+	private AsignacionDeBonificacion obtenerBonificacionSiAplica(Puesto puesto, Propietario propietario) {
+		if (propietario.esPenalizado()) {
+			return null;
+		}
+		Fachada fachada = Fachada.getInstancia();
+		return fachada.obtenerBonificacion(puesto, propietario);
+	}
+
+	private Tarifa buscarTarifaParaVehiculo(Puesto puesto, Vehiculo vehiculo) {
+		Fachada fachada = Fachada.getInstancia();
+		List<Tarifa> tarifas = fachada.tarifasDePuesto(puesto);
+		for (Tarifa tarifa : tarifas) {
+			if (tarifa.getCategoríaVehiculo().getNombre().equals(vehiculo.getCategoria().getNombre())) {
+				return tarifa;
 			}
 		}
+		return null;
+	}
+
+	private void procesarCostoYPago(Transito transito, Tarifa tarifaAplicable, AsignacionDeBonificacion bonificacion,
+			Propietario propietario) throws PeajesExceptions {
+		transito.calcularCosto(tarifaAplicable, bonificacion);
+		propietario.validarSaldoSuficiente(transito.getCosto());
+		propietario.descontarSaldo(transito.getCosto());
+	}
+
+	private void registrarTransito(Transito transito, Vehiculo vehiculo, Propietario propietario) {
+		transitos.add(transito);
+		vehiculo.getTransitos().add(transito);
+		propietario.getTransitos().add(transito);
+	}
+
+	private void notificarSiCorresponde(Propietario propietario, Transito transito) {
+		if (!propietario.esPenalizado()) {
+			propietario.notificarTransito(transito);
+			propietario.tieneSaldoBajo();
+		}
+	}
+
+	public List<Transito> getTransitosPropietario(Propietario propietario) {
+		List<Transito> transitosPropietario = propietario.getTransitos();
 		transitosPropietario.sort(Comparator.comparing(Transito::getFechaHora).reversed());
 		return transitosPropietario;
 	}

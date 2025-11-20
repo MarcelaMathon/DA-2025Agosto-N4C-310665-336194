@@ -36,13 +36,7 @@ public class ServicioVehiculos {
 	}
 
 	public List<Vehiculo> getVehiculosPropietario(Propietario propietario) {
-		List<Vehiculo> vehiculosPropietario = new ArrayList<>();
-		for (Vehiculo v : vehiculos) {
-			if (v.getPropietario().equals(propietario)) {
-				vehiculosPropietario.add(v);
-			}
-		}
-		return vehiculosPropietario;
+		return propietario.getVehículos();
 	}
 
 }

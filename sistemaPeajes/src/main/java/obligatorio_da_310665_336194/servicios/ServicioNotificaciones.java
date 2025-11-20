@@ -16,12 +16,7 @@ public class ServicioNotificaciones implements Observador {
 	private ArrayList<Notificacion> notificaciones = new ArrayList<>();
 
 	public List<Notificacion> getNotificacionesPropietario(Propietario propietario) {
-		List<Notificacion> notificacionesPropietario = new ArrayList<>();
-		for (Notificacion notificacion : notificaciones) {
-			if (notificacion.getPropietario().equals(propietario)) {
-				notificacionesPropietario.add(notificacion);
-			}
-		}
+		List<Notificacion> notificacionesPropietario = propietario.getNotificaciones();
 		notificacionesPropietario.sort(Comparator.comparing(Notificacion::getFechaHora).reversed());
 		return notificacionesPropietario;
 	}

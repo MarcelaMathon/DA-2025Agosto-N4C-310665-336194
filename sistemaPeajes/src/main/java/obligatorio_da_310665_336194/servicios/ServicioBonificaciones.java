@@ -34,13 +34,7 @@ public class ServicioBonificaciones {
 	}
 
 	public List<AsignacionDeBonificacion> obtenerBonificacionesPropietario(Propietario propietario) {
-		List<AsignacionDeBonificacion> bonificacionesPropietario = new ArrayList<>();
-		for (AsignacionDeBonificacion asignacion : asignacionDeBonificaciones) {
-			if (asignacion.getPropietario().equals(propietario)) {
-				bonificacionesPropietario.add(asignacion);
-			}
-		}
-		return bonificacionesPropietario;
+		return propietario.getAsignacionesDeBonificacion();
 	}
 
 	public void agregar(Bonificacion bonificacion) {
