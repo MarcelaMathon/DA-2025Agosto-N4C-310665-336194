@@ -42,7 +42,7 @@ public class ControladorLoginPropietario extends ControladorLoginAbstracto {
 
     @Override
     protected String getDestinoLogoutExitoso() {
-        return "login.html";
+        return "index.html";
     }
 
 }

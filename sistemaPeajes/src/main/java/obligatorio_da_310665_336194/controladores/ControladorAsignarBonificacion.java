@@ -10,10 +10,14 @@ import java.util.List;
 
 import org.springframework.context.annotation.Scope;
 import obligatorio_da_310665_336194.dominio.bonificacion.AsignacionDeBonificacion;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+import obligatorio_da_310665_336194.dominio.usuario.Administrador;
 
 import obligatorio_da_310665_336194.dominio.bonificacion.TipoBonificacion;
 import obligatorio_da_310665_336194.dominio.propietario.Propietario;
@@ -29,8 +33,11 @@ public class ControladorAsignarBonificacion {
 	Fachada fachada = Fachada.getInstancia();
 	private List<Puesto> puestos;
 
-	@PostMapping("/vistaConectada")
-	public List<Respuesta> inicializarVista() {
+	@GetMapping("/vistaConectada")
+	public List<Respuesta> inicializarVista(@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin) {
+		if (admin == null) {
+			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
+		}
 		// Cargar datos iniciales
 		return Respuesta.lista(bonificaciones(), puestos());
 	}

@@ -21,20 +21,17 @@ public class SistemaPeajesApplication {
 		cargarDatosDePrueba();
 		System.out.println("\n=======================================================");
 		System.out.println("   Aplicación iniciada correctamente");
-		System.out.println("   Accede a: http://localhost:8080/asignarBonificacion.html");
-		System.out.println("   Accede a: http://localhost:8080/emularTransito.html");
-		System.out.println("   Accede a: http://localhost:8080/cambiarEstado.html");
-		System.out.println("   Accede a: http://localhost:8080/tableroPropietario.html");
+		System.out.println("   Accede a: http://localhost:8080/index.html");
 		System.out.println("=======================================================\n");
 	}
 
 	private static void cargarDatosDePrueba() {
 		// Crear administradores
-		Administrador admin1 = new Administrador("111", "Admin Principal");
-		admin1.setPassword("admin111");
+		Administrador admin1 = new Administrador("12345678", "Usuario Administrador");
+		admin1.setPassword("admin.123");
 
-		Administrador admin2 = new Administrador("222", "Admin Secundario");
-		admin2.setPassword("admin222");
+		Administrador admin2 = new Administrador("21234567", "Admin Secundario");
+		admin2.setPassword("admin.1234");
 
 		Fachada.getInstancia().agregar((Usuario) admin1);
 		Fachada.getInstancia().agregar((Usuario) admin2);
@@ -73,11 +70,11 @@ public class SistemaPeajesApplication {
 		puesto2.agregarTarifa(tarifa6);
 
 		// Crear propietarios con diferentes estados
-		Propietario prop1 = new Propietario("12345678", "Juan Pérez");
-		prop1.setPassword("12345678");
-		Propietario prop2 = new Propietario("23456789", "María González");
-		Propietario prop3 = new Propietario("34567890", "Carlos Rodríguez");
-		Propietario prop4 = new Propietario("45678901", "Ana Martínez");
+		Propietario prop1 = new Propietario("23456789", "Usuario Propietario");
+		prop1.setPassword("prop.123");
+		Propietario prop2 = new Propietario("34567890", "María González");
+		Propietario prop3 = new Propietario("45678901", "Carlos Rodríguez");
+		Propietario prop4 = new Propietario("45678902", "Ana Martínez");
 
 		// prop1 y prop2 quedan habilitados por defecto
 		Fachada.getInstancia().agregar(prop1);

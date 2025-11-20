@@ -28,6 +28,7 @@ public abstract class ControladorLoginAbstracto {
         }
     }
 
+    @PostMapping("logout")
     public List<Respuesta> logout(HttpSession sesion) {
         Usuario usuario = getEstadoUsuario(sesion);
         if (usuario != null) {

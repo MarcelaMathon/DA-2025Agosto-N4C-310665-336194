@@ -27,7 +27,7 @@ public class ControladorLoginAdministrador extends ControladorLoginAbstracto {
 
 	@Override
 	protected String getDestinoLoginExitoso() {
-		return "emularTransito.html";
+		return "menuAdministrador.html";
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class ControladorLoginAdministrador extends ControladorLoginAbstracto {
 
 	@Override
 	protected String getDestinoLogoutExitoso() {
-		return "login.html";
+		return "index.html";
 	}
 
 }

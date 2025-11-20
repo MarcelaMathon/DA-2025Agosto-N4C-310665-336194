@@ -15,13 +15,6 @@
         <div class="icon">👤</div>
         <h1>Tablero de control del propietario</h1>
       </div>
-      <button
-        class="salir-btn"
-        onclick="debugData()"
-        style="margin-right: 10px; background: orange"
-      >
-        Debug
-      </button>
       <button class="salir-btn" onclick="window.location.href='/'">
         Salir
       </button>
@@ -150,19 +143,9 @@
     <script>
       // Configurar inicialización de vista
       urlIniciarVista = "/tableroPropietario/inicializar";
-      parametrosInicioVista = "cedula=12345678"; // Opciones: 12345678, 23456789, 34567890, 45678901
 
       // Configurar SSE para recibir actualizaciones en tiempo real
       urlRegistroSSE = "/tableroPropietario/registrarSSE";
-
-      // Función para debug
-      function debugData() {
-        submit("/tableroPropietario/debug", "cedula=12345678");
-      }
-
-      function mostrar_debug(data) {
-        console.log("Debug response:", data);
-      }
 
       // Variables globales
       let propietarioActual = null;
@@ -336,15 +319,10 @@
       }
 
       function borrarNotificaciones() {
-        if (!datosTablero.cedula) return;
-
         if (
           confirm("¿Está seguro de que desea borrar todas las notificaciones?")
         ) {
-          submit(
-            "/tableroPropietario/borrarNotificaciones",
-            "cedula=" + datosTablero.cedula
-          );
+          submit("/tableroPropietario/borrarNotificaciones", "");
         }
       }
 
@@ -375,6 +353,11 @@
       function formatearFechaHora(fecha) {
         if (!fecha) return "-";
         return formatearFecha(fecha) + " " + formatearHora(fecha);
+      }
+
+      // Manejo de sesión no autenticada
+      function mostrar_usuarioNoAutenticado(destino) {
+        window.location.href = destino;
       }
 
       // Manejo de errores

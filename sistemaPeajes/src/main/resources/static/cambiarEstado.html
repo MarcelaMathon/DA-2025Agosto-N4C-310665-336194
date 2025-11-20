@@ -4,70 +4,99 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cambiar Estado de Propietario</title>
+    <link rel="stylesheet" href="styles/menuNavegacion.css" />
     <link rel="stylesheet" href="styles/cambiarEstado.css" />
     <script src="vistaWeb.js"></script>
   </head>
   <body>
+    <!-- Menú de navegación -->
+    <nav class="nav-menu">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <span class="nav-brand-icon">🛣️</span>
+          <span>Sistema de Peajes - Admin</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="emularTransito.html">Emular Tránsito</a></li>
+          <li><a href="asignarBonificacion.html">Asignar Bonificación</a></li>
+          <li><a href="cambiarEstado.html" class="active">Cambiar Estado</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="btn-logout-nav" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
-      <div class="header">
-        <div class="header-icon">🔄</div>
-        <h1>Cambiar estado de propietario</h1>
-      </div>
-      <p class="subtitle">
-        Ingresa la cédula, revise el estado actual y seleccione un nuevo estado
-        (datos de ejemplo).
-      </p>
-
-      <!-- Sección: Buscar Propietario -->
-      <div class="section">
-        <div class="section-title">Cédula de identidad</div>
-        <form id="formBuscar">
-          <div class="form-group">
-            <input
-              type="text"
-              name="cedula"
-              id="cedula"
-              placeholder="12345678"
-              required
-            />
+      <div class="card">
+        <div class="card-header">
+          <div class="icon-title">
+            <span class="icon">🔄</span>
+            <h1>Cambiar estado de propietario</h1>
           </div>
-          <button type="submit">Buscar</button>
-        </form>
-      </div>
-
-      <!-- Información del Propietario -->
-      <div id="infoPropietario" class="info-box">
-        <div class="info-header">Propietario</div>
-        <div class="info-item">
-          <span class="info-label">Nombre</span>
-          <span class="info-value" id="propNombre"></span>
+          <p class="subtitle">
+            Ingresa la cédula, revise el estado actual y seleccione un nuevo estado
+            (datos de ejemplo).
+          </p>
         </div>
-        <div class="info-item">
-          <span class="info-label">Estado actual</span>
-          <span class="info-value" id="propEstadoContainer"></span>
-        </div>
-      </div>
 
-      <!-- Sección: Cambiar Estado -->
-      <div id="seccionCambiarEstado" style="display: none">
-        <div class="section">
-          <div class="section-title">Estados definidos</div>
-          <form id="formCambiar">
-            <div class="form-group">
-              <select name="posNuevoEstado" id="selectEstado" required>
-                <option value="-1" selected disabled>
-                  Seleccione un nuevo estado...
-                </option>
-              </select>
-              <p class="note">El estado actual se mostrará preseleccionado.</p>
+        <div class="card-body">
+          <div class="layout-two-columns">
+            <!-- Columna izquierda -->
+            <div class="left-column">
+              <div class="form-section">
+                <label for="cedula">Cédula de identidad</label>
+                <input
+                  type="text"
+                  name="cedula"
+                  id="cedula"
+                  class="form-input"
+                  placeholder="12345678"
+                  required
+                />
+                <button onclick="buscarPropietario()" class="btn-primary">
+                  Buscar
+                </button>
+              </div>
             </div>
-            <button type="submit">Cambiar estado</button>
-          </form>
+
+            <!-- Columna derecha -->
+            <div class="right-column">
+              <div class="form-section">
+                <label for="selectEstado">Estados definidos</label>
+                <select name="posNuevoEstado" id="selectEstado" class="form-select" required>
+                  <option value="-1" selected disabled>
+                    Activo
+                  </option>
+                </select>
+                <button onclick="cambiarEstado()" class="btn-primary">
+                  Cambiar estado
+                </button>
+                <p class="note">El estado actual se mostrará preseleccionado.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información del Propietario -->
+          <div id="infoPropietario" class="info-card">
+            <div class="info-header">Propietario</div>
+            <div class="info-row">
+              <span class="info-label">Nombre</span>
+              <span class="info-value" id="propNombre">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Estado actual</span>
+              <span class="info-value" id="propEstadoContainer">-</span>
+            </div>
+          </div>
+
           <div id="mensajeResultado"></div>
         </div>
-      </div>
 
-      <footer>© 2025 — Administración</footer>
+        <div class="card-footer">
+          © 2025 — Administración
+        </div>
+      </div>
     </div>
 
     <script src="utilesVista.js"></script>
@@ -119,11 +148,6 @@
         const estadoClass = getEstadoClass(data.estado);
         estadoContainer.innerHTML = `<span class="estado-badge ${estadoClass}">${data.estado}</span>`;
 
-        document.getElementById("infoPropietario").classList.add("show");
-
-        // Mostrar sección de cambiar estado
-        document.getElementById("seccionCambiarEstado").style.display = "block";
-
         // Preseleccionar el estado actual en el dropdown
         const select = document.getElementById("selectEstado");
         for (let i = 0; i < select.options.length; i++) {
@@ -146,50 +170,65 @@
         alert("❌ Error: " + mensaje);
       }
 
-      // Manejo de formularios
-      document
-        .getElementById("formBuscar")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const params = serializarFormulario("formBuscar");
-          submit("/cambiarEstado/buscarPropietarioPorCedula", params);
-        });
+      // Funciones de botones
+      function buscarPropietario() {
+        const cedula = document.getElementById("cedula").value;
+        if (!cedula) {
+          alert("Debe ingresar una cédula");
+          return;
+        }
+        const params = "cedula=" + encodeURIComponent(cedula);
+        submit("/cambiarEstado/buscarPropietarioPorCedula", params);
+      }
 
-      document
-        .getElementById("formCambiar")
-        .addEventListener("submit", async function (e) {
-          e.preventDefault();
+      async function cambiarEstado() {
+        if (!propietarioActual) {
+          alert("❌ Primero debe buscar un propietario");
+          return;
+        }
 
-          if (!propietarioActual) {
-            alert("❌ Primero debe buscar un propietario");
-            return;
-          }
+        const posNuevoEstado = document.getElementById("selectEstado").value;
 
-          const posNuevoEstado = document.getElementById("selectEstado").value;
+        if (posNuevoEstado === "-1") {
+          alert("❌ Debe seleccionar un estado");
+          return;
+        }
 
-          if (posNuevoEstado === "-1") {
-            alert("❌ Debe seleccionar un estado");
-            return;
-          }
+        const nuevoEstado = estadosDisponibles[posNuevoEstado];
 
-          const nuevoEstado = estadosDisponibles[posNuevoEstado];
+        // Confirmar cambio
+        const confirmar = await mostrarConfirmacion(
+          `¿Está seguro de cambiar el estado de ${propietarioActual.nombreCompleto} a ${nuevoEstado}?`,
+          "Sí, cambiar",
+          "Cancelar"
+        );
 
-          // Confirmar cambio
-          const confirmar = await mostrarConfirmacion(
-            `¿Está seguro de cambiar el estado de ${propietarioActual.nombreCompleto} a ${nuevoEstado}?`,
-            "Sí, cambiar",
-            "Cancelar"
-          );
+        if (!confirmar) return;
 
-          if (!confirmar) return;
+        const params =
+          "cedula=" +
+          encodeURIComponent(propietarioActual.cedula) +
+          "&posNuevoEstado=" +
+          posNuevoEstado;
+        submit("/cambiarEstado/cambiarEstado", params);
+      }
 
-          const params =
-            "cedula=" +
-            encodeURIComponent(propietarioActual.cedula) +
-            "&posNuevoEstado=" +
-            posNuevoEstado;
-          submit("/cambiarEstado/cambiarEstado", params);
-        });
+      // Función para cerrar sesión
+      function cerrarSesion() {
+        submit('/acceso/admin/logout', '');
+      }
+
+      function mostrar_Logout_exitoso(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_No_hay_usuario_logueado(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_usuarioNoAutenticado(destino) {
+        window.location.href = destino;
+      }
     </script>
   </body>
 </html>

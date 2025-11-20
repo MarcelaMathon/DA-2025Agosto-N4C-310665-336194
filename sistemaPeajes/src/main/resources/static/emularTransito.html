@@ -4,20 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Emular tránsito</title>
+    <link rel="stylesheet" href="styles/menuNavegacion.css" />
     <link rel="stylesheet" href="styles/emularTransito.css" />
     <script src="vistaWeb.js"></script>
   </head>
   <body>
-    <div class="header">
-      <div class="icon">🚗</div>
-      <h1>Emular tránsito</h1>
-    </div>
-    <p class="subtitle">
-      Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule
-      un tránsito.
-    </p>
+    <!-- Menú de navegación -->
+    <nav class="nav-menu">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <span class="nav-brand-icon">🛣️</span>
+          <span>Sistema de Peajes - Admin</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="emularTransito.html" class="active">Emular Tránsito</a></li>
+          <li><a href="asignarBonificacion.html">Asignar Bonificación</a></li>
+          <li><a href="cambiarEstado.html">Cambiar Estado</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="btn-logout-nav" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+      </div>
+    </nav>
 
-    <div class="container">
+    <div class="page-container">
+      <div class="card">
+        <div class="card-header">
+          <div class="icon-title">
+            <span class="icon">🚗</span>
+            <h1>Emular tránsito</h1>
+          </div>
+          <p class="subtitle">
+            Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule
+            un tránsito.
+          </p>
+        </div>
+
+        <div class="card-body">
       <form id="formEmularTransito">
         <div class="layout">
           <!-- Columna izquierda -->
@@ -105,9 +128,13 @@
           </div>
         </div>
       </form>
-    </div>
+        </div>
 
-    <div class="footer">© 2025 – Emular tránsitos</div>
+        <div class="card-footer">
+          © 2025 – Emular tránsitos
+        </div>
+      </div>
+    </div>
 
     <script src="utilesVista.js"></script>
     <script>
@@ -253,6 +280,23 @@
           .toISOString()
           .slice(0, 16);
       });
+
+      // Función para cerrar sesión
+      function cerrarSesion() {
+        submit('/acceso/admin/logout', '');
+      }
+
+      function mostrar_Logout_exitoso(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_No_hay_usuario_logueado(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_usuarioNoAutenticado(destino) {
+        window.location.href = destino;
+      }
     </script>
   </body>
 </html>

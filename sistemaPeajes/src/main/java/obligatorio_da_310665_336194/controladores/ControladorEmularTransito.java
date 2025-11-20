@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+import obligatorio_da_310665_336194.dominio.usuario.Administrador;
 
 import obligatorio_da_310665_336194.utils.Respuesta;
 
@@ -32,8 +35,11 @@ public class ControladorEmularTransito {
 	Fachada fachada = Fachada.getInstancia();
 	private List<Puesto> puestos;
 
-	@PostMapping("/vistaConectada")
-	public List<Respuesta> inicializarVista() {
+	@GetMapping("/vistaConectada")
+	public List<Respuesta> inicializarVista(@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin) {
+		if (admin == null) {
+			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
+		}
 		return listarPuestos();
 	}
 

@@ -4,62 +4,121 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Asignar Bonificaciones</title>
+    <link rel="stylesheet" href="styles/menuNavegacion.css" />
     <link rel="stylesheet" href="styles/asignarBonificacion.css" />
     <script src="vistaWeb.js"></script>
   </head>
   <body>
+    <!-- Menú de navegación -->
+    <nav class="nav-menu">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <span class="nav-brand-icon">🛣️</span>
+          <span>Sistema de Peajes - Admin</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="emularTransito.html">Emular Tránsito</a></li>
+          <li><a href="asignarBonificacion.html" class="active">Asignar Bonificación</a></li>
+          <li><a href="cambiarEstado.html">Cambiar Estado</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="btn-logout-nav" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
-      <h1>Asignar Bonificaciones</h1>
-
-      <div class="section">
-        <div class="section-title">
-          Paso 1 y 2: Seleccionar bonificación y puesto
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Bonificaciones definidas:</label>
-            <div id="listaBonificaciones"></div>
-          </div>
-          <div class="form-group">
-            <label>Puestos definidos:</label>
-            <div id="listaPuestos"></div>
+      <div class="card">
+        <div class="card-header">
+          <div class="icon-title">
+            <span class="icon">📋</span>
+            <h1>Asignar bonificaciones</h1>
           </div>
         </div>
-      </div>
 
-      <div class="section">
-        <div class="section-title">Paso 3: Buscar propietario</div>
-        <form id="formBuscar">
-          <div class="form-group">
-            <label>Cédula de identidad:</label>
-            <input
-              type="text"
-              name="cedula"
-              id="cedula"
-              placeholder="Ingrese cédula"
-            />
-          </div>
-          <button type="submit">Buscar propietario</button>
-        </form>
+        <div class="card-body">
+          <div class="layout-two-columns">
+            <!-- Columna izquierda -->
+            <div class="left-column">
+              <div class="form-section">
+                <label for="selectBonificacion">Bonificaciones definidas</label>
+                <select id="selectBonificacion" class="form-select">
+                  <option value="">Seleccione una bonificación</option>
+                </select>
+              </div>
 
-        <div id="infoPropietario" class="info-box">
-          <div class="info-item">
-            <strong>Nombre:</strong> <span id="propNombre"></span>
+              <div class="form-section">
+                <label for="selectPuesto">Puestos definidos</label>
+                <select id="selectPuesto" class="form-select">
+                  <option value="">Seleccione un puesto</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="right-column">
+              <div class="form-section">
+                <label for="cedula">Cédula de identidad</label>
+                <input
+                  type="text"
+                  id="cedula"
+                  class="form-input"
+                  placeholder="12345678"
+                />
+                <button onclick="buscarPropietario()" class="btn-primary">
+                  Buscar propietario
+                </button>
+              </div>
+
+              <div id="infoPropietario" class="info-card">
+                <div class="info-header">Propietario</div>
+                <div class="info-row">
+                  <span class="info-label">Nombre:</span>
+                  <span id="propNombre" class="info-value">-</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Estado:</span>
+                  <span id="propEstado" class="info-value">-</span>
+                </div>
+
+                <div class="bonificaciones-section">
+                  <div class="bonificaciones-title">Bonificaciones asignadas</div>
+                  <div id="tablaBonificaciones" class="table-wrapper">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Bonificación</th>
+                          <th>Puesto</th>
+                          <th>Fecha asignación</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="3" class="empty-message">Sin bonificaciones asignadas</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="form-section">
+                  <p class="help-text">
+                    Seleccione bonificación y puesto en las listas de la izquierda y luego asigne.
+                  </p>
+                  <button onclick="asignarBonificacion()" class="btn-primary">
+                    Asignar bonificación
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="info-item">
-            <strong>Estado:</strong> <span id="propEstado"></span>
-          </div>
-          <h4>Bonificaciones asignadas:</h4>
-          <div id="tablaBonificaciones"></div>
+
+          <div id="mensajeResultado"></div>
         </div>
-      </div>
 
-      <div class="section">
-        <div class="section-title">Paso 5 y 6: Asignar nueva bonificación</div>
-        <form id="formAsignar">
-          <button type="submit">Asignar bonificación</button>
-        </form>
-        <div id="mensajeResultado"></div>
+        <div class="card-footer">
+          © 2025 - Administración
+        </div>
       </div>
     </div>
 
@@ -75,81 +134,125 @@
 
       // Funciones para procesar respuestas del servidor
       function mostrar_bonificaciones(data) {
-        const html = crearListaDesdeJson({
-          data: data.map((nombre) => ({ nombre })),
-          campoMostrar: "nombre",
-          onSelectItem: (indice, objeto) => {
-            nombreBonificacionSeleccionada = objeto.nombre;
-          },
-          id: "selectBonificacion",
+        const select = document.getElementById("selectBonificacion");
+        select.innerHTML = '<option value="">Seleccione una bonificación</option>';
+        data.forEach((nombre, index) => {
+          const option = document.createElement("option");
+          option.value = nombre;
+          option.textContent = nombre;
+          select.appendChild(option);
         });
-        document.getElementById("listaBonificaciones").innerHTML = html;
+        
+        select.addEventListener("change", function() {
+          nombreBonificacionSeleccionada = this.value;
+        });
       }
 
       function mostrar_puestos(data) {
-        const html = crearListaDesdeJson({
-          data: data,
-          campoMostrar: "nombre",
-          onSelectItem: (indice, objeto) => {
-            posPuestoSeleccionado = indice;
-          },
-          id: "selectPuesto",
+        const select = document.getElementById("selectPuesto");
+        select.innerHTML = '<option value="">Seleccione un puesto</option>';
+        data.forEach((puesto, index) => {
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = puesto.nombre;
+          select.appendChild(option);
         });
-        document.getElementById("listaPuestos").innerHTML = html;
+        
+        select.addEventListener("change", function() {
+          posPuestoSeleccionado = parseInt(this.value);
+        });
       }
 
       function mostrar_propietario(data) {
         propietarioActual = data;
         document.getElementById("propNombre").textContent = data.nombreCompleto;
         document.getElementById("propEstado").textContent = data.estado;
-        document.getElementById("infoPropietario").classList.add("show");
       }
 
       function mostrar_bonificacionesAsignadas(data) {
-        const div = document.getElementById("tablaBonificaciones");
+        const tbody = document.querySelector("#tablaBonificaciones tbody");
+        tbody.innerHTML = "";
+        
         if (!data || data.length === 0) {
-          div.innerHTML =
-            '<p style="text-align:center;color:#999">Sin bonificaciones asignadas</p>';
+          tbody.innerHTML = '<tr><td colspan="3" class="empty-message">Sin bonificaciones asignadas</td></tr>';
           return;
         }
-        div.innerHTML = crearTablaDesdeJson(data);
+        
+        data.forEach(bonif => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${bonif.nombreBonificacion}</td>
+            <td>${bonif.nombrePuesto}</td>
+            <td>${bonif.fechaAsignacion}</td>
+          `;
+          tbody.appendChild(tr);
+        });
       }
 
       function mostrar_mensaje(texto) {
         document.getElementById("mensajeResultado").innerHTML =
           '<div class="message success">' + texto + "</div>";
+        setTimeout(() => {
+          document.getElementById("mensajeResultado").innerHTML = "";
+        }, 3000);
       }
 
       function excepcionDeAplicacion(mensaje) {
-        alert(mensaje);
+        document.getElementById("mensajeResultado").innerHTML =
+          '<div class="message error">' + mensaje + "</div>";
       }
 
-      // Manejo de formularios
-      document
-        .getElementById("formBuscar")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const params = serializarFormulario("formBuscar");
-          submit("/asignarBonificacion/buscarPropietario", params);
-        });
+      // Funciones de botones
+      function buscarPropietario() {
+        const cedula = document.getElementById("cedula").value;
+        if (!cedula) {
+          alert("Debe ingresar una cédula");
+          return;
+        }
+        const params = "cedula=" + encodeURIComponent(cedula);
+        submit("/asignarBonificacion/buscarPropietario", params);
+      }
 
-      document
-        .getElementById("formAsignar")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          if (!propietarioActual) {
-            alert("Primero debe buscar un propietario");
-            return;
-          }
-          const params =
-            "cedula=" +
-            encodeURIComponent(propietarioActual.cedula) +
-            "&posPuesto=" +
-            posPuestoSeleccionado +
-            "&nombreBonificacion=" +
-            encodeURIComponent(nombreBonificacionSeleccionada);
-          submit("/asignarBonificacion/asignar", params);
-        });
+      function asignarBonificacion() {
+        if (!propietarioActual) {
+          alert("Primero debe buscar un propietario");
+          return;
+        }
+        if (posPuestoSeleccionado < 0) {
+          alert("Debe seleccionar un puesto");
+          return;
+        }
+        if (!nombreBonificacionSeleccionada) {
+          alert("Debe seleccionar una bonificación");
+          return;
+        }
+        
+        const params =
+          "cedula=" +
+          encodeURIComponent(propietarioActual.cedula) +
+          "&posPuesto=" +
+          posPuestoSeleccionado +
+          "&nombreBonificacion=" +
+          encodeURIComponent(nombreBonificacionSeleccionada);
+        submit("/asignarBonificacion/asignar", params);
+      }
+
+      // Función para cerrar sesión
+      function cerrarSesion() {
+        submit('/acceso/admin/logout', '');
+      }
+
+      function mostrar_Logout_exitoso(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_No_hay_usuario_logueado(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_usuarioNoAutenticado(destino) {
+        window.location.href = destino;
+      }
     </script>
   </body>
 </html>

@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import obligatorio_da_310665_336194.utils.ConexionNavegador;
@@ -53,9 +53,14 @@ public class ControladorTableroPropietario implements Observador {
 		return conexionNavegador.getConexionSSE();
 	}
 
-	@PostMapping("/inicializar")
-	public List<Respuesta> inicializarTablero(@RequestParam String cedula) throws PeajesExceptions {
-		propietarioActual = fachada.buscarPropietarioPorCedula(cedula);
+	@GetMapping("/inicializar")
+	public List<Respuesta> inicializarTablero(@SessionAttribute(name = "PROPIETARIO_STATE_KEY", required = false) Propietario propietario) throws PeajesExceptions {
+		// Verificar si hay un propietario en la sesión
+		if (propietario == null) {
+			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
+		}
+		
+		propietarioActual = propietario;
 
 		// Registrar este controlador como observador del propietario
 		propietarioActual.agregar(this);
@@ -100,8 +105,11 @@ public class ControladorTableroPropietario implements Observador {
 	}
 
 	@PostMapping("/borrarNotificaciones")
-	public List<Respuesta> borrarNotificaciones(@RequestParam String cedula) throws PeajesExceptions {
-		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
+	public List<Respuesta> borrarNotificaciones(@SessionAttribute(name = "PROPIETARIO_STATE_KEY", required = false) Propietario propietario) throws PeajesExceptions {
+		// Verificar si hay un propietario en la sesión
+		if (propietario == null) {
+			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
+		}
 
 		fachada.borrarNotificaciones(propietario);
 

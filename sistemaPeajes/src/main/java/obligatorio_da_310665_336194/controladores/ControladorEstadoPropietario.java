@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+import obligatorio_da_310665_336194.dominio.usuario.Administrador;
 
 import obligatorio_da_310665_336194.utils.Respuesta;
 
@@ -24,8 +28,11 @@ public class ControladorEstadoPropietario {
 	Fachada fachada = Fachada.getInstancia();
 	private List<EstadoPropietario> estados;
 
-	@PostMapping("/vistaConectada")
-	public List<Respuesta> inicializarVista() {
+	@GetMapping("/vistaConectada")
+	public List<Respuesta> inicializarVista(@SessionAttribute(name = "ADMINISTRADOR_STATE_KEY", required = false) Administrador admin) {
+		if (admin == null) {
+			return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "index.html"));
+		}
 		estados = fachada.getEstados();
 		return estados();
 	}

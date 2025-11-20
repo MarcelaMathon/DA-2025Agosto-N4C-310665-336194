@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú Administrador - Sistema de Peajes</title>
+    <link rel="stylesheet" href="styles/menu.css" />
+    <script src="vistaWeb.js"></script>
+  </head>
+  <body>
+    <div class="menu-container">
+      <div class="menu-card">
+        <div class="header">
+          <div class="user-icon admin-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h1>Panel de Administrador</h1>
+          <p class="subtitle">Gestión del Sistema de Peajes</p>
+        </div>
+
+        <div class="menu-options">
+          <a href="emularTransito.html" class="menu-option">
+            <div class="option-icon blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                <path d="M6 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                <path d="M6 8l0 5l0 0"></path>
+                <path d="M6 13l6 0"></path>
+                <path d="M16 16l-8 0"></path>
+                <path d="M16 5l-3 0l0 5l5 0l0 6"></path>
+              </svg>
+            </div>
+            <div class="option-content">
+              <h3>Emular Tránsito</h3>
+              <p>Simular paso de vehículos por peajes</p>
+            </div>
+            <div class="option-arrow">→</div>
+          </a>
+
+          <a href="asignarBonificacion.html" class="menu-option">
+            <div class="option-icon green">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6"></path>
+                <path d="M9 12l2 2 4-4"></path>
+                <circle cx="18" cy="6" r="3"></circle>
+              </svg>
+            </div>
+            <div class="option-content">
+              <h3>Asignar Bonificación</h3>
+              <p>Gestionar bonificaciones a propietarios</p>
+            </div>
+            <div class="option-arrow">→</div>
+          </a>
+
+          <a href="cambiarEstado.html" class="menu-option">
+            <div class="option-icon orange">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+              </svg>
+            </div>
+            <div class="option-content">
+              <h3>Cambiar Estado</h3>
+              <p>Modificar estado de propietarios</p>
+            </div>
+            <div class="option-arrow">→</div>
+          </a>
+        </div>
+
+        <div class="footer-actions">
+          <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+        </div>
+
+        <div class="footer">
+          © 2025 - Sistema de Peajes
+        </div>
+      </div>
+    </div>
+
+    <script src="utilesVista.js"></script>
+    <script>
+      function cerrarSesion() {
+        submit('/acceso/admin/logout', '');
+      }
+
+      function mostrar_Logout_exitoso(destino) {
+        window.location.href = destino;
+      }
+
+      function mostrar_No_hay_usuario_logueado(destino) {
+        window.location.href = destino;
+      }
+    </script>
+  </body>
+</html>

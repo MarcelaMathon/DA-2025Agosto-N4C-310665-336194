@@ -10,8 +10,6 @@ public abstract class EstadoPropietario {
 
 	@Getter
 	protected String nombre;
-	@Getter
-	private boolean puedeIngresar;
 
 	private static final EstadoPropietario HABILITADO = new Habilitado();
 	private static final EstadoPropietario DESHABILITADO = new Deshabilitado();
