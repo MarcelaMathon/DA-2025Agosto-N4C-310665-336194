@@ -54,6 +54,7 @@ public class ControladorEstadoPropietario {
 	@PostMapping("/buscarPropietarioPorCedula")
 	public List<Respuesta> buscarPropietarioPorCedula(@RequestParam String cedula, HttpSession sesion)
 			throws Exception {
+		sesion.setAttribute(PROPIETARIO_KEY, null); // Limpiar propietario previo
 		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
 		sesion.setAttribute(PROPIETARIO_KEY, propietario); // Guardar en sesión
 		PropietarioDTO dto = new PropietarioDTO(propietario);

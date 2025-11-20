@@ -59,7 +59,6 @@ public class SistemaPeajesApplication {
 		// ========== CATEGORÍAS DE VEHÍCULOS ==========
 		CategoríaVehiculo catAutomovil = new CategoríaVehiculo("Automóvil");
 		CategoríaVehiculo catCamioneta = new CategoríaVehiculo("Camioneta");
-		CategoríaVehiculo catMoto = new CategoríaVehiculo("Moto");
 		CategoríaVehiculo catCamion = new CategoríaVehiculo("Camión");
 		System.out.println("✓ Categorías de vehículos: 4 (Automóvil, Camioneta, Moto, Camión)");
 
@@ -71,34 +70,28 @@ public class SistemaPeajesApplication {
 		// Tarifas para Puesto 1
 		Tarifa tarifa1_1 = new Tarifa(puesto1, catAutomovil, 100.0);
 		Tarifa tarifa1_2 = new Tarifa(puesto1, catCamioneta, 150.0);
-		Tarifa tarifa1_3 = new Tarifa(puesto1, catMoto, 50.0);
 		Tarifa tarifa1_4 = new Tarifa(puesto1, catCamion, 300.0);
 
 		puesto1.agregarTarifa(tarifa1_1);
 		puesto1.agregarTarifa(tarifa1_2);
-		puesto1.agregarTarifa(tarifa1_3);
 		puesto1.agregarTarifa(tarifa1_4);
 
 		// Tarifas para Puesto 2
 		Tarifa tarifa2_1 = new Tarifa(puesto2, catAutomovil, 80.0);
 		Tarifa tarifa2_2 = new Tarifa(puesto2, catCamioneta, 120.0);
-		Tarifa tarifa2_3 = new Tarifa(puesto2, catMoto, 40.0);
 		Tarifa tarifa2_4 = new Tarifa(puesto2, catCamion, 250.0);
 
 		puesto2.agregarTarifa(tarifa2_1);
 		puesto2.agregarTarifa(tarifa2_2);
-		puesto2.agregarTarifa(tarifa2_3);
 		puesto2.agregarTarifa(tarifa2_4);
 
 		// Tarifas para Puesto 3
 		Tarifa tarifa3_1 = new Tarifa(puesto3, catAutomovil, 120.0);
 		Tarifa tarifa3_2 = new Tarifa(puesto3, catCamioneta, 180.0);
-		Tarifa tarifa3_3 = new Tarifa(puesto3, catMoto, 60.0);
 		Tarifa tarifa3_4 = new Tarifa(puesto3, catCamion, 350.0);
 
 		puesto3.agregarTarifa(tarifa3_1);
 		puesto3.agregarTarifa(tarifa3_2);
-		puesto3.agregarTarifa(tarifa3_3);
 		puesto3.agregarTarifa(tarifa3_4);
 
 		Fachada.getInstancia().agregar(puesto1);
@@ -159,12 +152,25 @@ public class SistemaPeajesApplication {
 
 		// ========== VEHÍCULOS ==========
 		// Vehículos asociados a los propietarios
+		// Propietario 1 - 2 vehículos
 		Vehiculo vehiculo1 = new Vehiculo("ABC1234", "Toyota Hilux", prop1, "Blanco", catCamioneta);
-		Vehiculo vehiculo2 = new Vehiculo("DEF5678", "Honda Civic", prop2, "Azul", catAutomovil);
-		Vehiculo vehiculo3 = new Vehiculo("GHI9012", "Yamaha FZ", prop3, "Negro", catMoto);
-		Vehiculo vehiculo4 = new Vehiculo("JKL3456", "Ford Ranger", prop4, "Rojo", catCamioneta);
-		Vehiculo vehiculo5 = new Vehiculo("MNO7890", "Chevrolet Onix", prop1, "Gris", catAutomovil);
-		Vehiculo vehiculo6 = new Vehiculo("PQR1234", "Mercedes-Benz Actros", prop3, "Blanco", catCamion);
+		Vehiculo vehiculo2 = new Vehiculo("MNO7890", "Chevrolet Onix", prop1, "Gris", catAutomovil);
+
+		// Propietario 2 - 2 vehículos
+		Vehiculo vehiculo3 = new Vehiculo("DEF5678", "Honda Civic", prop2, "Azul", catAutomovil);
+		Vehiculo vehiculo4 = new Vehiculo("STU2345", "Volkswagen Amarok", prop2, "Negro", catCamioneta);
+
+		// Propietario 3 - 2 vehículos
+		Vehiculo vehiculo5 = new Vehiculo("PQR1234", "Mercedes-Benz Actros", prop3, "Blanco", catCamion);
+		Vehiculo vehiculo6 = new Vehiculo("VWX6789", "Nissan Versa", prop3, "Plateado", catAutomovil);
+
+		// Propietario 4 - 2 vehículos
+		Vehiculo vehiculo7 = new Vehiculo("JKL3456", "Ford Ranger", prop4, "Rojo", catCamioneta);
+		Vehiculo vehiculo8 = new Vehiculo("YZA0123", "Fiat Cronos", prop4, "Verde", catAutomovil);
+
+		// Propietario 5 - 2 vehículos
+		Vehiculo vehiculo9 = new Vehiculo("BCD4567", "Peugeot 208", prop5, "Rojo", catAutomovil);
+		Vehiculo vehiculo10 = new Vehiculo("EFG8901", "Renault Duster", prop5, "Marrón", catCamioneta);
 
 		Fachada.getInstancia().agregar(vehiculo1);
 		Fachada.getInstancia().agregar(vehiculo2);
@@ -172,7 +178,11 @@ public class SistemaPeajesApplication {
 		Fachada.getInstancia().agregar(vehiculo4);
 		Fachada.getInstancia().agregar(vehiculo5);
 		Fachada.getInstancia().agregar(vehiculo6);
-		System.out.println("✓ Vehículos cargados: 6 (con matrícula, modelo, color y categoría)");
+		Fachada.getInstancia().agregar(vehiculo7);
+		Fachada.getInstancia().agregar(vehiculo8);
+		Fachada.getInstancia().agregar(vehiculo9);
+		Fachada.getInstancia().agregar(vehiculo10);
+		System.out.println("✓ Vehículos cargados: 10 (2 por propietario, con matrícula, modelo, color y categoría)");
 
 		System.out.println("\n=== Datos de prueba cargados correctamente ===");
 		System.out.println("Usuario Administrador: 12345678 / admin.123");

@@ -68,7 +68,7 @@ public class ControladorAsignarBonificacion {
 	public List<Respuesta> buscarPropietario(@RequestParam String cedula, HttpSession sesion) throws PeajesExceptions {
 		if (cedula.isBlank())
 			throw new PeajesExceptions("Debe ingresar una cédula");
-
+		sesion.setAttribute(PROPIETARIO_KEY, null); // Limpiar propietario previo
 		Propietario propietario = fachada.buscarPropietarioPorCedula(cedula);
 		sesion.setAttribute(PROPIETARIO_KEY, propietario); // Guardar en sesión
 		PropietarioDTO dto = new PropietarioDTO(propietario);
